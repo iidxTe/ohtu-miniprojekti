@@ -1,14 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package io.github.iidxTe.ohtu.model;
 
-/**
- *
- * @author rrobert
- */
-public class Bookmark {
+
+public abstract class Bookmark {
+    
+    private String title;
+    private String type;
+
+    public Bookmark(String title, String type) {
+        this.title = title;
+        this.type = type;
+    }
+    
+    
     
 }
