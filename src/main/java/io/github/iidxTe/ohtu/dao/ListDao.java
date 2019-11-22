@@ -23,5 +23,5 @@ public class ListDao implements BookmarkDao {
     public void add(Bookmark bookmark) {
         list.add(bookmark);
     }
-    
+ 
 }
