@@ -3,7 +3,7 @@ package io.github.iidxTe.ohtu.model;
 
 
 public abstract class Bookmark {
-    
+
     private String title;
     private String type;
 
@@ -11,7 +11,7 @@ public abstract class Bookmark {
         this.title = title;
         this.type = type;
     }
-    
-    
-    
+
+
+
 }
