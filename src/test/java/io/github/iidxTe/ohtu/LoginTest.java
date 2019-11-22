@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import io.github.bonigarcia.seljup.SeleniumExtension;
 
@@ -17,7 +18,7 @@ public class LoginTest {
 	}
 
 	@Test
-	public void testLogin(FirefoxDriver driver) {
+	public void testLogin(HtmlUnitDriver driver) {
 		driver.get("http://localhost:8080");
 		// TODO when changing to real login security, this must be changed
 		driver.findElement(By.id("username")).sendKeys("test");
