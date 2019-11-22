@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public class ListDao implements BookmarkDao {
-    
+
     private List<Bookmark> list;
 
     public ListDao() {
@@ -23,5 +23,5 @@ public class ListDao implements BookmarkDao {
     public void add(Bookmark bookmark) {
         list.add(bookmark);
     }
- 
+
 }

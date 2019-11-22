@@ -6,11 +6,11 @@ import java.util.List;
 
 
 public interface BookmarkDao {
-    
-    
+
+
     public List<Bookmark> getAll();
-    
+
     public void add(Bookmark bookmark);
-        
-    
+
+
 }
