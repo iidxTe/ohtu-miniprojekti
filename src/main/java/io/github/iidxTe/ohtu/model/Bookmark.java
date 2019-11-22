@@ -12,6 +12,4 @@ public abstract class Bookmark {
         this.type = type;
     }
 
-
-
 }

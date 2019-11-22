@@ -6,7 +6,7 @@ public class Book extends Bookmark {
 
     private String author;
 
-    public Book(String title, String type, String author) {
+    public Book(String title, String author) {
         super(title, "book");
         this.author = author;
     }
