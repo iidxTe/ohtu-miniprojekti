@@ -24,8 +24,8 @@ public class BookmarkController {
     }
 
     @PostMapping("/")
-    public String create(@RequestParam String name) {
-        service.create(name);
+    public String create(@RequestParam String title, @RequestParam String author, @RequestParam String isbn) {
+        service.createBook(title, author, isbn);
         return "redirect:/";
     }
 

@@ -5,19 +5,32 @@
     </head>
 
     <body>
-        <h1>Kirjat</h1>
+        <h1>Kirjavinkit</h1>
         
         
 
         <ul>
-            <li th:each="book: ${books}"><span th:text="${book.title}">name</span></li>
+            <li th:each="book: ${books}">
+                kirjan nimi: <span th:text="${book.getTitle()}">name</span><br/>
+                kirjan kirjoittaja: <span th:text="${book.getAuthor()}">author</span><br/>
+                kirjan isbn: <span th:text="${book.getIsbn()}">isbn</span><br/>
+            </li>
         </ul>
+        
+      
+        
 
-        <h2>Add new</h2>
+        <h2>Lisää uusi kirja</h2>
 
         <form th:action="@{/}" method="POST">
-            <input type="text" name="name"/>
-            <input type="submit" value="Add!"/>
+            <span>kirjan nimi:</span><br/>
+            <input type="text" name="title"/><br/>
+            <span>kirjoittaja:</span><br/>
+            <input type="text" name="author"/><br/>
+            <span>ISBN:</span><br/>
+            <input type="text" name="isbn"/><br/>
+            
+            <input type="submit" value="Lisää!"/>
         </form>
 
        

@@ -3,7 +3,6 @@ package io.github.iidxTe.ohtu.model;
 
 
 public class Book extends Bookmark {
-
     private String author;
     private String isbn;
 
