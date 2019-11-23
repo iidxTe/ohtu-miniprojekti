@@ -12,4 +12,17 @@ public abstract class Bookmark {
         this.type = type;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    @Override
+    public String toString() {
+        return title + " " + type;
+    }        
+
 }
