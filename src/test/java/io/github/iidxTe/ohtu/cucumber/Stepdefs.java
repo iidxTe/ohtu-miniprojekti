@@ -5,6 +5,7 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
 import io.github.iidxTe.ohtu.dao.ListDao;
+import io.github.iidxTe.ohtu.domain.BookmarkService;
 import io.github.iidxTe.ohtu.model.Book;
 import io.github.iidxTe.ohtu.model.Bookmark;
 
@@ -12,37 +13,40 @@ import static org.junit.Assert.*;
 
 public class Stepdefs {
 
-    ListDao listDao;
+    BookmarkService service;
     Book book;
 
+    public Stepdefs() {
+        service = new BookmarkService();
+    }
+    
     @Given ("the list is empty")
     public void theListIsEmpty() {
-        listDao = new ListDao();
+        service.setDao(new ListDao());
     }
 
     @Given ("the list is not empty")
     public void theListIsNotEmpty() {
-        listDao = new ListDao();
-        book = new Book("Eeva Virtanen", "Tosi hyvä kirja", "13579");
-        listDao.add(book);
+        service.setDao(new ListDao());
+        service.createBook("Eeva Virtanen", "Tosi hyvä kirja", "13579");
     }
 
     @When("a book is added")
     public void aBookIsAdded() {
-        book = new Book("Samuli Turska", "Näin kalastat kalaa", "314666");
+        service.createBook("Samuli Turska", "Näin kalastat kalaa", "314666");
     }
 
     @And("another book is added")
     public void anotherBookIsAdded() {
-        book = new Book("Katariina Suuri", "Näin hallitset maailmaa", "9999999");
+        service.createBook("Katariina Suuri", "Näin hallitset maailmaa", "9999999");
     }
 
     @Then("the book should be on the list")
     public void theBookShouldBeOnTheList() {
         boolean found = false;
-        for (Bookmark bookmark : listDao.getAll()) {
+        for (Bookmark bookmark : service.listAll()) {
             Book current = ((Book) bookmark);
-            if (current.getIsbn() == "314666") {
+            if (current.getIsbn().equals("314666")) {
                 found = true;
                 break;
             }
@@ -54,12 +58,12 @@ public class Stepdefs {
     public void theBooksShouldBeOnTheList() {
         boolean found1 = false;
         boolean found2 = false;
-        for (Bookmark bookmark : listDao.getAll()) {
+        for (Bookmark bookmark : service.listAll()) {
             Book current = ((Book) bookmark);
-            if (current.getIsbn() == "314666") {
+            if (current.getIsbn().equals("314666")) {
                 found1 = true;
             }
-            if (current.getIsbn() == "9999999") {
+            if (current.getIsbn().equals("9999999")) {
                 found2 = true;
             }
         }

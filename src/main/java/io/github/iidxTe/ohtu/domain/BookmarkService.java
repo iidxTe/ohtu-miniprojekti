@@ -14,12 +14,10 @@ public class BookmarkService {
         dao = new ListDao();
     }
 
-    // tän voi poistaa kun on formi kaikille kirjan muuttujille
-    public void create(String title) {
-        Bookmark book = new Book(title, "matti", "123");
-        dao.add(book);
+    public void setDao(BookmarkDao dao) {
+        this.dao = dao;
     }
-
+        
     public void createBook(String title, String author, String isbn) {
         Bookmark book = new Book(title, author, isbn);        
         dao.add(book);
