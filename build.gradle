@@ -11,6 +11,11 @@ group = 'io.github.iidxTe'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
+project.ext {
+	cucumberVersion = '4.7.4'
+	junitVersion = '4.12'
+}
+
 repositories {
 	mavenCentral()
 }
@@ -28,6 +33,11 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	testCompile 'io.cucumber:cucumber-java:' + cucumberVersion
+	testCompile 'io.cucumber:cucumber-junit:' + cucumberVersion
+	testCompile 'junit:junit:' + junitVersion
+
 }
 
 mainClassName = 'io.github.iidxTe.ohtu.OhtuApplication'
