@@ -1,4 +1,4 @@
-package cucumber;
+package io.github.iidxTe.ohtu.cucumber;
 
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;

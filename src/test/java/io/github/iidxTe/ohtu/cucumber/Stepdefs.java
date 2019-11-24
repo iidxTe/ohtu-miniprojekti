@@ -1,4 +1,4 @@
-package cucumber;
+package io.github.iidxTe.ohtu.cucumber;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
