@@ -20,12 +20,18 @@ public class BookmarkController {
     @GetMapping("/")
     public String home(Model model) {
         model.addAttribute("books", this.service.listAll());
+        model.addAttribute("types", this.service.getAvailableBookmarks());
         return "index";
     }
 
     @PostMapping("/")
-    public String create(@RequestParam String title, @RequestParam String author, @RequestParam String isbn) {
-        service.createBook(title, author, isbn);
+    public String create(@RequestParam String title, @RequestParam String author, @RequestParam String isbn, @RequestParam String type) {
+        switch (type) {
+            case "kirja":
+                service.createBook(title, author, isbn);
+                break;
+            default:
+        }
         return "redirect:/";
     }
 

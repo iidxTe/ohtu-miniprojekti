@@ -5,31 +5,36 @@
     </head>
 
     <body>
-        <h1>Kirjavinkit</h1>
+        <h1>Lukuvinkit</h1>
         
         
 
         <ul>
             <li th:each="book: ${books}">
-                kirjan nimi: <span th:text="${book.getTitle()}">name</span><br/>
-                kirjan kirjoittaja: <span th:text="${book.getAuthor()}">author</span><br/>
-                kirjan isbn: <span th:text="${book.getIsbn()}">isbn</span><br/>
+                Otsikko: <span th:text="${book.getTitle()}">name</span><br/>
+                Kirjoittaja: <span th:text="${book.getAuthor()}">author</span><br/>
+                ISBN: <span th:text="${book.getIsbn()}">isbn</span><br/>
             </li>
         </ul>
         
       
         
 
-        <h2>Lisää uusi kirja</h2>
-
+        <h2>Lisää uusi lukuvinkki</h2>
+                        
         <form th:action="@{/}" method="POST">
-            <span>kirjan nimi:</span><br/>
+            <span>Tyyppi: </span>
+            <select id="type" name="type">
+                <option th:each="type: ${types}" th:value="${type}" th:text="${type}">            
+                </option>
+            </select><br/>
+            <span>Otsikko:</span><br/>
             <input type="text" name="title"/><br/>
-            <span>kirjoittaja:</span><br/>
+            <span>Kirjoittaja:</span><br/>
             <input type="text" name="author"/><br/>
             <span>ISBN:</span><br/>
             <input type="text" name="isbn"/><br/>
-            
+                        
             <input type="submit" value="Lisää!"/>
         </form>
 
