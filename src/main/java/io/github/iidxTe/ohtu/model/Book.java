@@ -7,7 +7,7 @@ public class Book extends Bookmark {
     private String isbn;
 
     public Book(String title, String author, String isbn) {
-        super(title, "book");
+        super(title);
         this.author = author;
         this.isbn = isbn;
     }
@@ -23,6 +23,11 @@ public class Book extends Bookmark {
     @Override
     public String toString() {
         return super.toString() + " " + author + " " + isbn;
+    }
+
+    @Override
+    public String getType() {
+        return "book";
     }        
 
 }

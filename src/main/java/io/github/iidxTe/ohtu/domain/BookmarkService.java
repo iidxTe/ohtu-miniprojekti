@@ -26,9 +26,10 @@ public class BookmarkService {
         this.dao = dao;
     }
         
-    public void createBook(String title, String author, String isbn) {
-        Bookmark book = new Book(title, author, isbn);        
+    public Book createBook(String title, String author, String isbn) {
+        Book book = new Book(title, author, isbn);        
         dao.add(book);
+        return book;
     }
 
     public List<Bookmark> listAll() {

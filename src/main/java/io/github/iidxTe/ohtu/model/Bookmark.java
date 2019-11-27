@@ -1,34 +1,47 @@
 
 package io.github.iidxTe.ohtu.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 public abstract class Bookmark {
+    
+    /**
+     * Unique id of this bookmark.
+     */
+    private int id;
 
     private String title;
-    private String type;
-    private List<String> tags;
-    private String comments;
+    
+    private boolean isRead;
 
-    public Bookmark(String title, String type) {
+    public Bookmark(String title) {
         this.title = title;
-        this.type = type;
-        this.tags = new ArrayList<>();
+        this.isRead = false;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public String getType() {
-        return type;
+    public abstract String getType();
+    
+    public boolean isRead() {
+        return isRead;
+    }
+    
+    public void setIsRead(boolean read) {
+        this.isRead = read;
     }
 
     @Override
     public String toString() {
-        return title + " " + type;
+        return title + " " + getType();
     }        
 
 }
