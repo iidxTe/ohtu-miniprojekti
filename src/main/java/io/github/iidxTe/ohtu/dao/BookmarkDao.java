@@ -11,6 +11,9 @@ public interface BookmarkDao {
     public List<Bookmark> getAll();
 
     public void add(Bookmark bookmark);
+    
+    public void update(Bookmark bookmark);
+    
 
 
 }

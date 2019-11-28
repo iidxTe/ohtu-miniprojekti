@@ -27,9 +27,14 @@ public class BookmarkService {
     }
         
     public Book createBook(String title, String author, String isbn) {
-        Book book = new Book(title, author, isbn);        
+        Book book = new Book(title, author, isbn);
+        book.setId((int) (Math.random() * 1000000000));
         dao.add(book);
         return book;
+    }
+    
+    public void updateBook(Book book) {
+        dao.update(book);
     }
 
     public List<Bookmark> listAll() {
