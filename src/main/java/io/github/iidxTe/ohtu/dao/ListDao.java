@@ -24,4 +24,11 @@ public class ListDao implements BookmarkDao {
         list.add(bookmark);
     }
 
+    @Override
+    public void update(Bookmark bookmark) {        
+        int i = list.indexOf(bookmark);
+        Bookmark book = list.get(i);
+        book.setIsRead(!book.isRead());        
+    }
+
 }
