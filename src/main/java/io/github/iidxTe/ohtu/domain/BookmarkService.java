@@ -33,7 +33,8 @@ public class BookmarkService {
         return book;
     }
     
-    public void updateBook(Book book) {
+    public void updateBook(int id) {
+        Bookmark book = dao.getById(id);
         dao.update(book);
     }
 

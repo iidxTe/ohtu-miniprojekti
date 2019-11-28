@@ -13,7 +13,8 @@ public interface BookmarkDao {
     public void add(Bookmark bookmark);
     
     public void update(Bookmark bookmark);
-    
+        
+    public Bookmark getById(int id);
 
 
 }
