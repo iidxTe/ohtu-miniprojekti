@@ -6,6 +6,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,5 +32,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // We'll need a persistent database (e.g. H2 on file) and a way to create accounts for that
         UserDetails testUser = User.withUsername("test").password(passwordEncoder.encode("test")).roles("USER").build();
         authManager.inMemoryAuthentication().withUser(testUser);
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .mvcMatchers("/register", "/login").anonymous() // Logging in, creating users
+                .anyRequest().authenticated() // Everything else is only for users
+                .and()
+                .formLogin().loginPage("/login"); // Unauthorized requests redirect here
+                
+
     }
 }
