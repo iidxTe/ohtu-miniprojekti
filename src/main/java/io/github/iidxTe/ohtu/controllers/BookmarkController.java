@@ -36,6 +36,7 @@ public class BookmarkController {
         return "redirect:/";
     }
     
+    
     @PutMapping("/{id}")
     public String update(@RequestParam int id) {
                 service.updateBook(id);
