@@ -37,10 +37,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .mvcMatchers("/register", "/login").anonymous() // Logging in, creating users
+                .mvcMatchers("/register").anonymous() // Creating users
                 .anyRequest().authenticated() // Everything else is only for users
                 .and()
-                .formLogin().loginPage("/login"); // Unauthorized requests redirect here
+                .formLogin().loginPage("/login").permitAll() // Unauthorized requests redirect here
+                .and()
+                .logout(); // Enable default logout mechanism
                 
 
     }
