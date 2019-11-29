@@ -9,19 +9,19 @@
         	<fieldset>
         	    <legend>Kirjaudu sisään</legend>
         	    <div th:if="${param.error}">
-        	        Väärä salasana tai käyttäjätunnus.
+        	        Väärä käyttäjätunnus tai salasana.
         	    </div>
         	    <div th:if="${param.logout}">
         	        Olet kirjautunut ulos.
         	    </div>
         	    
         	    <label>Käyttäjätunnus:</label>
-        	    <input type="text" name="username"><br/>
+        	    <input type="text" id="username" name="username"><br/>
         	    
         	    <label>Salasana:</label>
-        	    <input type="password" name="password"><br/>
+        	    <input type="password" id="password" name="password"><br/>
         	    
-        	    <input type="submit" value="Kirjaudu sisään"/>
+        	    <input type="submit" id="login" value="Kirjaudu sisään"/>
         	</fieldset>
         	<section>
         		Ei tunnusta? <a href="/register">Rekisteröidy nyt!</a>

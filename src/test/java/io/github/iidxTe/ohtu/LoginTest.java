@@ -25,7 +25,7 @@ public class LoginTest {
         // TODO when changing to real login security, this must be changed
         driver.findElement(By.id("username")).sendKeys("test");
         driver.findElement(By.id("password")).sendKeys("test");
-        driver.findElement(By.className("btn")).click();
+        driver.findElement(By.id("login")).click();
         assertTrue(driver.getPageSource().contains("Lukuvinkit"));
     }
 
@@ -34,7 +34,7 @@ public class LoginTest {
         driver.get("http://localhost:8080");
         driver.findElement(By.id("username")).sendKeys("wrong");
         driver.findElement(By.id("password")).sendKeys("password");
-        driver.findElement(By.className("btn")).click();
-        assertTrue(driver.getPageSource().contains("Bad credentials"));
+        driver.findElement(By.id("login")).click();
+        assertTrue(driver.getPageSource().contains("Väärä käyttäjätunnus tai salasana"));
     }
 }
