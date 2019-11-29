@@ -1,1 +1,24 @@
-TODO
+<!doctype html>
+<html>
+    <head>
+        <title>Rekisteröidy</title>
+    </head>
+    
+    <body>
+        <form th:action="@{/register}" method="POST">
+        	<fieldset>
+        	    <legend>Rekisteröidy</legend>
+        	   
+        	    
+        	    <label>Käyttäjätunnus:</label>
+        	    <input type="text" id="username" name="username"><br/>
+        	    
+        	    <label>Salasana:</label>
+        	    <input type="password" id="password" name="password"><br/>
+        	    
+        	    <input type="submit" id="login" value="Luo uusi"/>
+        	</fieldset>
+        	
+        </form>
+    </body>
+</html>
