@@ -14,7 +14,7 @@ public class MapUserDao implements UserDao {
     private int nextId;
     
     @Override
-    public User getOrCreateUser(String name) {
+    public User getUser(String name) {
         return users.computeIfAbsent(name, k -> {
             User user = new User(name);
             user.setId(nextId++);
@@ -26,6 +26,12 @@ public class MapUserDao implements UserDao {
     @Override
     public void updateUser(User user) {
         // Do nothing, we don't store users
+    }
+
+    @Override
+    public User createUser(String name, String password) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

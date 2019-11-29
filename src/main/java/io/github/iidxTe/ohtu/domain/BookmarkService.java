@@ -1,19 +1,27 @@
 package io.github.iidxTe.ohtu.domain;
 
 import io.github.iidxTe.ohtu.dao.BookmarkDao;
+import io.github.iidxTe.ohtu.dao.DatabaseDao;
 import io.github.iidxTe.ohtu.dao.ListDao;
 import io.github.iidxTe.ohtu.model.Book;
 import io.github.iidxTe.ohtu.model.Bookmark;
+import io.github.iidxTe.ohtu.model.User;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
 public class BookmarkService {
 
+    @Autowired
     BookmarkDao dao;
+    
     private List<String> availableBookmarks;
 
     public BookmarkService() {
-        dao = new ListDao();
         this.availableBookmarks = new ArrayList<>();
         availableBookmarks.add("kirja");
     }
@@ -26,10 +34,9 @@ public class BookmarkService {
         this.dao = dao;
     }
         
-    public Book createBook(String title, String author, String isbn) {
+    public Book createBook(User owner, String title, String author, String isbn) {
         Book book = new Book(title, author, isbn);
-        book.setId((int) (Math.random() * 1000000000));
-        dao.add(book);
+        dao.add(owner, book);
         return book;
     }
     
@@ -38,8 +45,8 @@ public class BookmarkService {
         dao.update(book);
     }
 
-    public List<Bookmark> listAll() {
-        return dao.getAll();
+    public List<Bookmark> listAll(User user) {
+        return dao.getAll(user);
     }
 
 }

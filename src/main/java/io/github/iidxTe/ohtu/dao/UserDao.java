@@ -9,7 +9,15 @@ public interface UserDao {
 	 * @param name User name.
 	 * @return An user.
 	 */
-	User getOrCreateUser(String name);
+	User getUser(String name);
+	
+	/**
+	 * Creates a new user.
+	 * @param name User name.
+	 * @param password Password.
+	 * @return A newly created user.
+	 */
+	User createUser(String name, String password);
 	
 	/**
 	 * Stores update to data of given user.

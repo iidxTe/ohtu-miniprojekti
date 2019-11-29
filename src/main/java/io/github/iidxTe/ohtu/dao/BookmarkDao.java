@@ -2,19 +2,19 @@
 package io.github.iidxTe.ohtu.dao;
 
 import io.github.iidxTe.ohtu.model.Bookmark;
+import io.github.iidxTe.ohtu.model.User;
+
 import java.util.List;
 
 
 public interface BookmarkDao {
 
+    List<Bookmark> getAll(User user);
 
-    public List<Bookmark> getAll();
-
-    public void add(Bookmark bookmark);
+    void add(User user, Bookmark bookmark);
     
-    public void update(Bookmark bookmark);
+    void update(Bookmark bookmark);
         
-    public Bookmark getById(int id);
-
+    Bookmark getById(int id);
 
 }

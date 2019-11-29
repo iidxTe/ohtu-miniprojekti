@@ -3,6 +3,8 @@ package io.github.iidxTe.ohtu.dao;
 
 import io.github.iidxTe.ohtu.model.Book;
 import io.github.iidxTe.ohtu.model.Bookmark;
+import io.github.iidxTe.ohtu.model.User;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,21 +18,18 @@ public class ListDao implements BookmarkDao {
     }   
 
     @Override
-    public List<Bookmark> getAll() {
+    public List<Bookmark> getAll(User user) {
         return list;
     }
 
     @Override
-    public void add(Bookmark bookmark) {
+    public void add(User user, Bookmark bookmark) {
         list.add(bookmark);
     }
 
     @Override
     public void update(Bookmark bookmark) {        
-        int i = list.indexOf(bookmark);
-        Bookmark book = list.get(i);
-        book.setIsRead(!book.isRead());      
-        list.set(i, book);
+        
     }
 
     @Override
