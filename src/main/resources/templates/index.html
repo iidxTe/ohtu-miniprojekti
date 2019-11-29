@@ -13,7 +13,8 @@
             <li th:each="book: ${books}">
                 Otsikko: <span th:text="${book.getTitle()}">name</span><br/>
                 Kirjoittaja: <span th:text="${book.getAuthor()}">author</span><br/>
-                <span th:if="${book.getIsbn() != null}" th:text=" 'ISBN: ' + ${book.getIsbn()} ">isbn</span><br/>
+                <span th:if="${book.getIsbn().isEmpty()}" ></span>
+                <span th:unless="${book.getIsbn().isEmpty()}" th:text=" 'ISBN: ' + ${book.getIsbn()} ">isbn</span><br/>
             </li>
         </ul>
         
