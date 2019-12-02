@@ -15,14 +15,19 @@ import io.github.bonigarcia.seljup.SeleniumExtension;
 public class LoginTest {
 
     @BeforeAll
-    public static void launchApp() {
+    public static void launchApp(HtmlUnitDriver driver) {
         OhtuApplication.main();
+        
+        driver.get("http://localhost:8080/register");
+        driver.findElement(By.id("username")).sendKeys("test");
+        driver.findElement(By.id("password")).sendKeys("test");
+        driver.findElement(By.id("register")).click();
+        assertTrue(driver.getPageSource().contains("Kirjaudu sisään"));
     }
 
     @Test
     public void correctPassword(HtmlUnitDriver driver) {
         driver.get("http://localhost:8080");
-        // TODO when changing to real login security, this must be changed
         driver.findElement(By.id("username")).sendKeys("test");
         driver.findElement(By.id("password")).sendKeys("test");
         driver.findElement(By.id("login")).click();

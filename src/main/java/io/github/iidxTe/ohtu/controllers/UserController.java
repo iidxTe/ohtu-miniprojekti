@@ -30,11 +30,11 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String username, @RequestParam String password) {
+    public String register(Model model, @RequestParam String username, @RequestParam String password) {
         if (dao.getUser(username) == null) {
             dao.createUser(username, password);
         }
-        return "index";
+        return "redirect:login"; // Allow newly created user to login
     }
 
     // We're processing login attempts with tools provided by Spring

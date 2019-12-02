@@ -1,17 +1,15 @@
 package io.github.iidxTe.ohtu.domain;
 
-import io.github.iidxTe.ohtu.dao.BookmarkDao;
-import io.github.iidxTe.ohtu.dao.DatabaseDao;
-import io.github.iidxTe.ohtu.dao.ListDao;
-import io.github.iidxTe.ohtu.model.Book;
-import io.github.iidxTe.ohtu.model.Bookmark;
-import io.github.iidxTe.ohtu.model.User;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import io.github.iidxTe.ohtu.dao.BookmarkDao;
+import io.github.iidxTe.ohtu.model.Book;
+import io.github.iidxTe.ohtu.model.Bookmark;
+import io.github.iidxTe.ohtu.model.User;
 
 @Service
 public class BookmarkService {

@@ -14,6 +14,9 @@
         	    <div th:if="${param.logout}">
         	        Olet kirjautunut ulos.
         	    </div>
+        	    <div th:if="${param.newuser}">
+        	        Uusi käyttäjä luotu. Voit nyt kirjautua sisään!
+        	    </div>
         	    
         	    <label>Käyttäjätunnus:</label>
         	    <input type="text" id="username" name="username"><br/>
