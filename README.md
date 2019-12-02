@@ -1,6 +1,11 @@
 # ohtu-miniprojekti ![](https://github.com/iidxTe/ohtu-miniprojekti/workflows/Java%20CI/badge.svg)
 [productBacklog](https://docs.google.com/spreadsheets/d/1jcgyrBhQjKcOjReRpKeF86ApAhfezBlr4MvJ3JAZQGc/edit?usp=sharing)
 
+
+Link to Heroku:
+https://limitless-lowlands-09269.herokuapp.com/
+
+
 ## Definition of Done
 * Story has acceptance criteria, that is also documented with Cucumber and is
 automatically tested
