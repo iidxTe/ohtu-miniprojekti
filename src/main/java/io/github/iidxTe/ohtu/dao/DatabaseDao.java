@@ -40,7 +40,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
         try (Connection conn = db.getConnection()) {
             // Books table
             PreparedStatement query = conn.prepareStatement("CREATE TABLE IF NOT EXISTS books (" + 
-                    "    id INTEGER PRIMARY KEY AUTO_INCREMENT," + 
+                    "    id SERIAL PRIMARY KEY," + 
                     "    userId INTEGER," + 
                     "    title VARCHAR," + 
                     "    author VARCHAR," + 
@@ -51,7 +51,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             
             // Users table
             PreparedStatement query2 = conn.prepareStatement("CREATE TABLE IF NOT EXISTS users ("
-                    + "    id INTEGER PRIMARY KEY AUTO_INCREMENT,"
+                    + "    id SERIAL PRIMARY KEY,"
                     + "    name VARCHAR NOT NULL,"
                     + "    password VARCHAR NOT NULL,"
                     + "    displayName VARCHAR NOT NULL"
