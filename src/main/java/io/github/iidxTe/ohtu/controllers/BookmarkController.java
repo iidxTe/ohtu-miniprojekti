@@ -29,8 +29,9 @@ public class BookmarkController {
         
     @GetMapping("/")
     public String home(Model model, Principal login) {
-        model.addAttribute("books", this.service.listAll(userDao.getUser(login.getName())));
-        model.addAttribute("types", this.service.getAvailableBookmarks());
+        model.addAttribute("user", userDao.getUser(login.getName()).getDisplayName());
+        model.addAttribute("books", service.listAll(userDao.getUser(login.getName())));
+        model.addAttribute("types", service.getAvailableBookmarks());
         model.addAttribute("user", login.getName());
         return "index";
     }

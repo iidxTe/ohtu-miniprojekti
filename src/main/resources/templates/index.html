@@ -7,7 +7,7 @@
     <body>
         <h1>Lukuvinkit</h1>
 
-        <div><span th:text="${user}">user</span> Kirjautunut sisään</div>
+        <div>Tervetuloa, <span th:text="${user}">user</span></div>
 
         <form th:action="@{/logout}" method="post"> 
             <input type="submit" value="Kirjaudu ulos"/> 
