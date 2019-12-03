@@ -31,9 +31,15 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(Model model, @RequestParam String username, @RequestParam String password) {
-        if (dao.getUser(username) == null) {
-            dao.createUser(username, password);
+        if (dao.getUser(username) != null) {
+            model.addAttribute("error","käyttäjätunnus on jo olemassa");
+            return "redirect:register";
         }
+        if (username.length() < 4 || password.length() < 4) {
+            model.addAttribute("error","liian lyhyt käyttäjäninmi tai salasana");
+            return "redirect:register";
+        }
+        dao.createUser(username, password);
         return "redirect:login"; // Allow newly created user to login
     }
 

@@ -8,9 +8,7 @@
         <form th:action="@{/register}" method="POST">
             <fieldset>
                 <legend>Rekisteröidy</legend>
-                <div th:if="${param.error}">
-                    Tämä käyttäjätunnus on jo käytössä.
-                </div>
+                    <div><span th:if="${error}"> Virhe</span></div>
                     <label>Käyttäjätunnus:</label>
                     <input type="text" id="username" name="username"><br/>
 
