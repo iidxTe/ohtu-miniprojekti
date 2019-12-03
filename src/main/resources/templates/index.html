@@ -16,6 +16,7 @@
                 <div><span th:if="${book.getIsbn().isEmpty()}" ></span></div>
                 <div><span th:unless="${book.getIsbn().isEmpty()}" th:text=" 'ISBN: ' + ${book.getIsbn()} ">isbn</span></div>
                 <div><input type="checkbox" name="luettu" value="${book.isRead()}"/>luettu</div>
+                <a th:href="@{/editBookmark/{id}(id=${book.getId()})}">Muokkaa</a>
             </li>
         </ul>
         
