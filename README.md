@@ -10,7 +10,9 @@ Vaihtoehtoisesti voit ladata ohjeman koneellesi kloonaamalla projektin osoittees
 
 Toimiakseen ohjelma vaatii että koneellesi on asennettuna Java8.
 
-Testit voit suorittaa komennolla "./gradlew test jacocoTestReport".
+Testit voit suorittaa komennolla "./gradlew test jacocoTestReport". Testikattavuusraportin löytää tiedostosta build/reports/jacoco/test/html/index.html. Nykyinen testikattavuus:
+
+![Testikattavuus](https://github.com/iidxTe/ohtu-miniprojekti/blob/master/jacoco.png)
 
 
 [ProductBacklog](https://docs.google.com/spreadsheets/d/1jcgyrBhQjKcOjReRpKeF86ApAhfezBlr4MvJ3JAZQGc/edit?usp=sharing)
