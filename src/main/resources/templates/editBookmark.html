@@ -7,15 +7,16 @@
     <body>
         
         <h2>Muokkaa lukuvinkkiä</h2>
-                        
-        <form th:action="@{/editBookmark}" method="POST">
-            <div>Otsikko: <span th:text="${editableBook.getTitle()}">name</span></div>
-            <div>Kirjoittaja: <span th:text="${editableBook.getAuthor()}">author</span></div>
-            <div><span th:if="${editableBook.getIsbn().isEmpty()}" ></span></div>
-            <div><span th:unless="${editableBook.getIsbn().isEmpty()}" th:text=" 'ISBN: ' + ${editableBook.getIsbn()} ">isbn</span></div>
+        
+        <div>Otsikko: <span th:text="${editableBook.getTitle()}">name</span></div>
+        <div>Kirjoittaja: <span th:text="${editableBook.getAuthor()}">author</span></div>
+        <div><span th:if="${editableBook.getIsbn().isEmpty()}" ></span></div>
+        <div><span th:unless="${editableBook.getIsbn().isEmpty()}" th:text=" 'ISBN: ' + ${editableBook.getIsbn()} ">isbn</span></div>
+        
+        <form th:action="@{/editBookmark/{id}(id=${editableBook.getId()})}" method="POST">           
 
             <div>
-                Merkitse luetuksi:<input type="checkbox" name="luettu" value="${editableBook.isRead()}"/>
+                Merkitse luetuksi:<input type="checkbox" name="isRead" th:checked="${editableBook.isRead()}"/>
             </div>
                         
             <input type="submit" value="Muokkaa"/>

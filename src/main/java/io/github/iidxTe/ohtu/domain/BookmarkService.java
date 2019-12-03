@@ -31,6 +31,10 @@ public class BookmarkService {
     public void setDao(BookmarkDao dao) {
         this.dao = dao;
     }
+    
+    public Book getBookById(int id) {
+        return (Book) dao.getById(id);
+    }
         
     public Book createBook(User owner, String title, String author, String isbn) {
         Book book = new Book(title, author, isbn);
@@ -38,8 +42,9 @@ public class BookmarkService {
         return book;
     }
     
-    public void updateBook(int id) {
+    public void updateBook(int id, boolean isRead) {
         Bookmark book = dao.getById(id);
+        book.setIsRead(isRead);
         dao.update(book);
     }
 
