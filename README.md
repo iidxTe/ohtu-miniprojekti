@@ -1,9 +1,20 @@
 # ohtu-miniprojekti ![](https://github.com/iidxTe/ohtu-miniprojekti/workflows/Java%20CI/badge.svg)
-[productBacklog](https://docs.google.com/spreadsheets/d/1jcgyrBhQjKcOjReRpKeF86ApAhfezBlr4MvJ3JAZQGc/edit?usp=sharing)
+
+# Ohjelmistotuotantokurssi syksy 2019 – miniprojekti. 
+Projektin tarkoituksena on harjoitella ketterien ohjelmistotuotatoprosessien ja scrum-menetelmuien käyttöä. 
+
+Projektissa totutetaan lukuvinkkikirjasto. Lukuvinkkikirjaston tarkoituksena on toimia käyttäjän henkilökohytiasena lukuvinkkien talennuspaikkana. Tallnnettujen lukuvinkkien selaislun lisäksi käyttäjä voi merkata lukemansa kirjan luetuksi.  Lukuvinkkikirjasto vaatii rekisteröitymisen palvelun käyttäjäksi. 
+
+Sovellusta voi käyttää suoraan selaimella ositteessa:(https://limitless-lowlands-09269.herokuapp.com/).
+
+Vaihtoehtoisesti voit ladata ohjeman koneellesi kloonaamalla projektin osoitteesta https://github.com/iidxTe/ohtu-miniprojekti.git. Kloonattuasi projektin voit suorittaa komennon "./gradlew bootrun" projetin juurikansiossa ja tämän jälkeen käyttää sovellusta osoitteessa localhost:8080.
+
+Toimiakseen ohjelma vaatii että koneellesi on asennettuna Java8.
+
+Testit voit suorittaa komennolla "./gradlew test jacocoTestReport".
 
 
-Link to Heroku:
-https://limitless-lowlands-09269.herokuapp.com/
+[ProductBacklog](https://docs.google.com/spreadsheets/d/1jcgyrBhQjKcOjReRpKeF86ApAhfezBlr4MvJ3JAZQGc/edit?usp=sharing)
 
 
 ## Definition of Done
