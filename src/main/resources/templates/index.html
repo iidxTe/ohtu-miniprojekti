@@ -6,8 +6,12 @@
 
     <body>
         <h1>Lukuvinkit</h1>
-        
-        
+
+        <div><span th:text="${user}">user</span> Kirjautunut sisään</div>
+
+        <form th:action="@{/logout}" method="post"> 
+            <input type="submit" value="Kirjaudu ulos"/> 
+        </form>
 
         <ul>
             <li th:each="book: ${books}">
@@ -19,12 +23,12 @@
                 <a th:href="@{/editBookmark/{id}(id=${book.getId()})}">Muokkaa</a>
             </li>
         </ul>
-        
-      
-        
+
+
+
 
         <h2>Lisää uusi lukuvinkki</h2>
-                        
+
         <form th:action="@{/}" method="POST">
             <span>Tyyppi: </span>
             <select id="type" name="type">
@@ -37,10 +41,10 @@
             <input type="text" name="author" required="true"/><br/>
             <span>ISBN:</span><br/>
             <input type="text" name="isbn"/><br/>
-                        
+
             <input type="submit" value="Lisää!"/>
         </form>
 
-       
+
     </body>
 </html>

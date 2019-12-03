@@ -31,6 +31,7 @@ public class BookmarkController {
     public String home(Model model, Principal login) {
         model.addAttribute("books", this.service.listAll(userDao.getUser(login.getName())));
         model.addAttribute("types", this.service.getAvailableBookmarks());
+        model.addAttribute("user", login.getName());
         return "index";
     }
 
