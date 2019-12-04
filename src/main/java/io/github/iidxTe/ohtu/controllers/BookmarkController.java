@@ -61,5 +61,11 @@ public class BookmarkController {
         service.updateBook(id, isRead);
         return "redirect:/";
     }
+    
+    @PostMapping("/deleteBookmark/{id}") 
+    public String deleteBookmark(@PathVariable("id") int id) {
+        //service.deleteBook(id);
+        return "redirect:/";
+    }
 
 }

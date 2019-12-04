@@ -20,6 +20,14 @@
             </div>
                         
             <input type="submit" value="Muokkaa"/>
+        
+        
         </form>
+        <footer>
+
+         <form th:action="@{/deleteBookmark/{id}(id=${editableBook.getId()})}" method="POST">                    
+            <input type="submit" value="Poista"/>
+        </form>
+        </footer>
     </body>
 </html>
