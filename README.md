@@ -1,4 +1,4 @@
-# ohtu-miniprojekti ![](https://github.com/iidxTe/ohtu-miniprojekti/workflows/Java%20CI/badge.svg)
+﻿# ohtu-miniprojekti ![](https://github.com/iidxTe/ohtu-miniprojekti/workflows/Java%20CI/badge.svg)
 
 Projektin tarkoituksena on harjoitella ketterien ohjelmistotuotantoprosessien ja scrum-menetelmien käyttöä. 
 
@@ -23,7 +23,7 @@ Testit voit suorittaa komennolla "./gradlew test jacocoTestReport". Testikattavu
 automatically tested
 * Line coverage of added code is at least 70%
 * CI passes all tests
-* Feature is usable on production (which may be local computer)
+* Feature is usable on production
 * Code quality is acceptable
   * Good naming
   * Modular architecture
