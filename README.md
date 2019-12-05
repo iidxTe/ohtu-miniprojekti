@@ -1,5 +1,7 @@
 ﻿# ohtu-miniprojekti ![](https://github.com/iidxTe/ohtu-miniprojekti/workflows/Java%20CI/badge.svg)
 
+[![codecov](https://codecov.io/gh/iidxTe/ohtu-miniprojekti/branch/master/graph/badge.svg)](https://codecov.io/gh/iidxTe/ohtu-miniprojekti)
+
 Projektin tarkoituksena on harjoitella ketterien ohjelmistotuotantoprosessien ja scrum-menetelmien käyttöä. 
 
 Projektissa toteutetaan lukuvinkkikirjasto. Lukuvinkkikirjaston tarkoituksena on toimia käyttäjän henkilökohtaisena lukuvinkkien tallennuspaikkana. Tallennettujen lukuvinkkien selailun lisäksi käyttäjä voi merkata lukemansa kirjan luetuksi. Lukuvinkkikirjasto vaatii rekisteröitymisen palvelun käyttäjäksi. 
