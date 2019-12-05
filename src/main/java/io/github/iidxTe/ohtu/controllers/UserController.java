@@ -44,5 +44,10 @@ public class UserController {
     }
 
     // We're processing login attempts with tools provided by Spring
-    // TODO user settings
+
+    // TODO user settings: EI toimi vielä
+    @GetMapping("/settings")
+    public String settingsForm(Model model) {
+        return "settings";
+    }
 }

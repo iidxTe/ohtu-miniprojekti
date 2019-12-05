@@ -9,6 +9,10 @@
 
         <div>Tervetuloa, <span th:text="${user}">user</span></div>
 
+        <br>
+        <a href="settings.html">Tästä pääset asetuksiin</a>
+        <br>
+
         <form th:action="@{/logout}" method="POST"> 
             <input type="submit" value="Kirjaudu ulos"/> 
         </form>
