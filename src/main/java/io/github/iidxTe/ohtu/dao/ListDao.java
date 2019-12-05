@@ -18,22 +18,22 @@ public class ListDao implements BookmarkDao {
     }   
 
     @Override
-    public List<Bookmark> getAll(User user) {
+    public List<Bookmark> getAllBookmarksByUser(User user) {
         return list;
     }
 
     @Override
-    public void add(User user, Bookmark bookmark) {
+    public void addBookmark(User user, Bookmark bookmark) {
         list.add(bookmark);
     }
 
     @Override
-    public void update(Bookmark bookmark) {        
+    public void updateBookmark(Bookmark bookmark) {        
         
     }
 
     @Override
-    public Bookmark getById(int id) {
+    public Bookmark getBookmarkById(int id) {
         Bookmark book = null;
         
         for (Bookmark bookmark : list) {

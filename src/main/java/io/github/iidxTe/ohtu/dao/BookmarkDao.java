@@ -9,12 +9,12 @@ import java.util.List;
 
 public interface BookmarkDao {
 
-    List<Bookmark> getAll(User user);
+    List<Bookmark> getAllBookmarksByUser(User user);
 
-    void add(User user, Bookmark bookmark);
+    void addBookmark(User user, Bookmark bookmark);
     
-    void update(Bookmark bookmark);
+    void updateBookmark(Bookmark bookmark);
         
-    Bookmark getById(int id);
+    Bookmark getBookmarkById(int id);
 
 }

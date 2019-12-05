@@ -39,14 +39,12 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     private void init() {
         try (Connection conn = db.getConnection()) {
             // Books table
-            PreparedStatement query = conn.prepareStatement("CREATE TABLE IF NOT EXISTS books (" + 
-                    "    id SERIAL PRIMARY KEY," + 
-                    "    userId INTEGER," + 
-                    "    title VARCHAR," + 
-                    "    author VARCHAR," + 
-                    "    isbn VARCHAR," + 
-                    "    isRead BOOLEAN" + 
-                    ")");
+            PreparedStatement query = conn.prepareStatement("CREATE TABLE IF NOT EXISTS books ("
+                    + "    id SERIAL PRIMARY KEY,"
+                    + "    title VARCHAR,"
+                    + "    author VARCHAR,"
+                    + "    isbn VARCHAR"
+                    + ")");
             query.executeUpdate();
             
             // Users table
@@ -54,59 +52,89 @@ public class DatabaseDao implements BookmarkDao, UserDao {
                     + "    id SERIAL PRIMARY KEY,"
                     + "    name VARCHAR NOT NULL,"
                     + "    password VARCHAR NOT NULL,"
-                    + "    displayName VARCHAR NOT NULL"
+                    + "    displayName VARCHAR NOT NULL,"
+                    + "    readerGroup VARCHAR"
                     + ")");
             query2.executeUpdate();
+            
+            //UserBook table
+            
+            PreparedStatement query3 = conn.prepareStatement("CREATE TABLE IF NOT EXISTS userbook ("
+                    + "    id SERIAL PRIMARY KEY,"
+                    + "    user_id INTEGER NOT NULL,"
+                    + "    book_id INTEGER NOT NULL,"
+                    + "    owner BOOLEAN,"
+                    + "    hasRead BOOLEAN,"
+                    + "    FOREIGN KEY (user_id) REFERENCES users(id),"
+                    + "    FOREIGN KEY (book_id) REFERENCES books(id)"
+                    + ")");
+            query3.executeUpdate();
+            
         } catch (SQLException e) {
             throw new Error(e);
         }
     }
     
     @Override
-    public List<Bookmark> getAll(User user) {
+    public List<Bookmark> getAllBookmarksByUser(User user) {
         try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("SELECT * FROM books WHERE userId=?");
+            PreparedStatement query = conn.prepareStatement("SELECT books.id, books.title, books.author, books.isbn, userbook.hasRead"
+                    + "    FROM books, userbook WHERE books.id = userbook.book_id"
+                    + "    AND userbook.user_id = ?"
+                    + "    AND userbook.owner = ?");
             query.setInt(1, user.getId());
+            query.setBoolean(2, true);
+            
             ResultSet results = query.executeQuery();
             
             List<Bookmark> bookmarks = new ArrayList<>();
+            
             while (results.next()) {
-                Bookmark book = new Book(results.getString("title"),
-                        results.getString("author"), results.getString("isbn"));
-                book.setId(results.getInt("id"));
-                book.setIsRead(results.getBoolean("isRead"));
+                Bookmark book = new Book(results.getString("books.title"),
+                        results.getString("author"), results.getString("books.isbn"));
+                book.setId(results.getInt("books.id"));
+                book.setIsRead(results.getBoolean("userbook.hasRead"));
                 bookmarks.add(book);
             }
+
             return bookmarks;
+            
         } catch (SQLException e) {
             throw new Error(e);
         }
     }
 
     @Override
-    public void add(User user, Bookmark bookmark) {
+    public void addBookmark(User user, Bookmark bookmark) {
         try (Connection conn = db.getConnection()) {
             Book book = (Book) bookmark;
-            PreparedStatement query = conn.prepareStatement("INSERT INTO books (title,userId,author,isbn,isRead) VALUES (?,?,?,?,?)",
+            PreparedStatement query = conn.prepareStatement("INSERT INTO books (title, author, isbn) VALUES (?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
             query.setString(1, book.getTitle());
-            query.setInt(2, user.getId());
-            query.setString(3, book.getAuthor());
-            query.setString(4, book.getIsbn());
-            query.setBoolean(5, book.isRead());
+            query.setString(2, book.getAuthor());
+            query.setString(3, book.getIsbn());
             query.executeUpdate();
             
             try (ResultSet keys = query.getGeneratedKeys()) {
                 keys.next();
                 book.setId((int) keys.getLong(1));
+                System.out.println("kirjalle id");
             }
+            
+            PreparedStatement query2 = conn.prepareStatement("INSERT INTO userbook (user_id, book_id, owner, hasRead) VALUES (?, ?, ?, ?)");
+            query2.setInt(1, user.getId());
+            query2.setInt(2, book.getId());
+            query2.setBoolean(3, true);
+            query2.setBoolean(4, false);
+            query2.executeUpdate();            
+            
         } catch (SQLException e) {
             throw new Error(e);
         }
     }
 
     @Override
-    public void update(Bookmark bookmark) {
+    public void updateBookmark(Bookmark bookmark) {
         try (Connection conn = db.getConnection()) {
             Book book = (Book) bookmark;
             PreparedStatement query = conn.prepareStatement("UPDATE books SET title=?, author=?, isbn=?, isRead=? WHERE id=?");
@@ -123,7 +151,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     }
 
     @Override
-    public Bookmark getById(int id) {
+    public Bookmark getBookmarkById(int id) {
         try (Connection conn = db.getConnection()) {
             PreparedStatement query = conn.prepareStatement("SELECT * FROM books WHERE id=?");
             query.setInt(1, id);

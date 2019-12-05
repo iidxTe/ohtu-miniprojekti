@@ -33,23 +33,23 @@ public class BookmarkService {
     }
     
     public Book getBookById(int id) {
-        return (Book) dao.getById(id);
+        return (Book) dao.getBookmarkById(id);
     }
         
     public Book createBook(User owner, String title, String author, String isbn) {
         Book book = new Book(title, author, isbn);
-        dao.add(owner, book);
+        dao.addBookmark(owner, book);
         return book;
     }
     
     public void updateBook(int id, boolean isRead) {
-        Bookmark book = dao.getById(id);
+        Bookmark book = dao.getBookmarkById(id);
         book.setIsRead(isRead);
-        dao.update(book);
+        dao.updateBookmark(book);
     }
 
     public List<Bookmark> listAll(User user) {
-        return dao.getAll(user);
+        return dao.getAllBookmarksByUser(user);
     }
 
 }
