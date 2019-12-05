@@ -43,3 +43,10 @@ mainClassName = 'io.github.iidxTe.ohtu.OhtuApplication'
 test {
 	useJUnitPlatform()
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled true
+    }
+}
