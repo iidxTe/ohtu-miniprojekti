@@ -30,7 +30,7 @@ public class BookmarkController {
     @GetMapping("/")
     public String home(Model model, Principal login) {
         model.addAttribute("user", userDao.getUser(login.getName()).getDisplayName());
-        model.addAttribute("books", service.listAll(userDao.getUser(login.getName())));
+        model.addAttribute("books", service.listAllByUser(userDao.getUser(login.getName())));
         model.addAttribute("types", service.getAvailableBookmarks());
         model.addAttribute("user", login.getName());
         return "index";
@@ -63,8 +63,8 @@ public class BookmarkController {
     }
     
     @PostMapping("/deleteBookmark/{id}") 
-    public String deleteBookmark(@PathVariable("id") int id) {
-        //service.deleteBook(id);
+    public String deleteBookmark(@PathVariable("id") int id, Principal login) {
+        service.deleteBookmark(id, userDao.getUser(login.getName()));
         return "redirect:/";
     }
 

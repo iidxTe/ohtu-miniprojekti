@@ -45,4 +45,14 @@ public class ListDao implements BookmarkDao {
         return book;
     }
 
+    @Override
+    public void deleteBookmark(int id, boolean permanent) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean validateOwner(int userId, int bookmarkId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

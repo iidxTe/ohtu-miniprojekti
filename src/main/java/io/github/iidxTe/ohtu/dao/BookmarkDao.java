@@ -16,5 +16,9 @@ public interface BookmarkDao {
     void updateBookmark(Bookmark bookmark);
         
     Bookmark getBookmarkById(int id);
+    
+    void deleteBookmark(int bookId, boolean permanent);
+    
+    boolean validateOwner(int userId, int bookmarkId);
 
 }

@@ -26,21 +26,21 @@ public class BookmarkServiceTest {
 
     @Test
     public void listAllWithEmptyListReturnsEmpty() {
-        assertEquals(0, service.listAll(user).size());
-        assertEquals("[]", service.listAll(user).toString());
+        assertEquals(0, service.listAllByUser(user).size());
+        assertEquals("[]", service.listAllByUser(user).toString());
     }
 
     @Test
     public void creatingItemIncreasesListAllSize() {
         service.createBook(user, "abc", "matti", "123");
-        assertEquals(1, service.listAll(user).size());
+        assertEquals(1, service.listAllByUser(user).size());
     }
 
     @Test
     public void listAllWithOneItemAddedReturnsThatItem() {
         Book book = new Book("abc", "matti", "123");
         service.createBook(user, "abc", "matti", "123");
-        assertEquals(book.toString(), service.listAll(user).get(0).toString());
+        assertEquals(book.toString(), service.listAllByUser(user).get(0).toString());
     }
 
     @Test
@@ -49,8 +49,8 @@ public class BookmarkServiceTest {
         Book book2 = new Book("ihmemaa", "liisa", "456");
         service.createBook(user, "abc", "matti", "123");
         service.createBook(user, "ihmemaa", "liisa", "456");
-        assertEquals(book.toString(), service.listAll(user).get(0).toString());
-        assertEquals(book2.toString(), service.listAll(user).get(1).toString());
+        assertEquals(book.toString(), service.listAllByUser(user).get(0).toString());
+        assertEquals(book2.toString(), service.listAllByUser(user).get(1).toString());
     }
 
 }

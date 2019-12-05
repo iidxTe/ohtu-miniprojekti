@@ -11,6 +11,8 @@ public abstract class Bookmark {
     private String title;
     
     private boolean isRead;
+    
+    private boolean onList;
 
     public Bookmark(String title) {
         this.title = title;
@@ -37,6 +39,14 @@ public abstract class Bookmark {
     
     public void setIsRead(boolean read) {
         this.isRead = read;
+    }
+    
+    public boolean onList() {
+        return onList;
+    }
+    
+    public void setOnList(boolean onlist) {
+        this.onList = onlist;
     }
 
     @Override

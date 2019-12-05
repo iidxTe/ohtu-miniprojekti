@@ -20,6 +20,8 @@ public class User {
 	 * Display name set by the user. Should be set to {@link #name} initially.
 	 */
 	private String displayName;
+        
+        private String group;
 	
 	public User(String name) {
 		this.name = name;
@@ -44,5 +46,13 @@ public class User {
 	public void setDisplayName(String displayName) {
 		this.displayName = displayName;
 	}
+        
+        public String getGroup() {
+            return group;
+        }
+        
+        public void setGroup(String group) {
+            this.group = group;
+        }
 	
 }

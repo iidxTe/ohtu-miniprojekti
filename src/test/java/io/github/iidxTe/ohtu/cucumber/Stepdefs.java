@@ -49,7 +49,7 @@ public class Stepdefs {
     @Then("the book should be on the list")
     public void theBookShouldBeOnTheList() {
         boolean found = false;
-        for (Bookmark bookmark : service.listAll(user)) {
+        for (Bookmark bookmark : service.listAllByUser(user)) {
             Book current = ((Book) bookmark);
             if (current.getIsbn().equals("314666")) {
                 found = true;
@@ -63,7 +63,7 @@ public class Stepdefs {
     public void theBooksShouldBeOnTheList() {
         boolean found1 = false;
         boolean found2 = false;
-        for (Bookmark bookmark : service.listAll(user)) {
+        for (Bookmark bookmark : service.listAllByUser(user)) {
             Book current = ((Book) bookmark);
             if (current.getIsbn().equals("314666")) {
                 found1 = true;

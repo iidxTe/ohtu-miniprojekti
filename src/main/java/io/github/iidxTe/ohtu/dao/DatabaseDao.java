@@ -43,7 +43,8 @@ public class DatabaseDao implements BookmarkDao, UserDao {
                     + "    id SERIAL PRIMARY KEY,"
                     + "    title VARCHAR,"
                     + "    author VARCHAR,"
-                    + "    isbn VARCHAR"
+                    + "    isbn VARCHAR,"
+                    + "    onList BOOLEAN"
                     + ")");
             query.executeUpdate();
             
@@ -108,17 +109,17 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     public void addBookmark(User user, Bookmark bookmark) {
         try (Connection conn = db.getConnection()) {
             Book book = (Book) bookmark;
-            PreparedStatement query = conn.prepareStatement("INSERT INTO books (title, author, isbn) VALUES (?,?,?)",
+            PreparedStatement query = conn.prepareStatement("INSERT INTO books (title, author, isbn, onList) VALUES (?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
             query.setString(1, book.getTitle());
             query.setString(2, book.getAuthor());
             query.setString(3, book.getIsbn());
+            query.setBoolean(4, true);
             query.executeUpdate();
             
             try (ResultSet keys = query.getGeneratedKeys()) {
                 keys.next();
                 book.setId((int) keys.getLong(1));
-                System.out.println("kirjalle id");
             }
             
             PreparedStatement query2 = conn.prepareStatement("INSERT INTO userbook (user_id, book_id, owner, hasRead) VALUES (?, ?, ?, ?)");
@@ -137,14 +138,21 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     public void updateBookmark(Bookmark bookmark) {
         try (Connection conn = db.getConnection()) {
             Book book = (Book) bookmark;
-            PreparedStatement query = conn.prepareStatement("UPDATE books SET title=?, author=?, isbn=?, isRead=? WHERE id=?");
+            PreparedStatement query = conn.prepareStatement("UPDATE books SET title=?, author=?, isbn=?"
+                    + " WHERE books.id=?");
             query.setString(1, book.getTitle());
-            // Not updating userId, bookmarks cannot change owner
             query.setString(2, book.getAuthor());
             query.setString(3, book.getIsbn());
-            query.setBoolean(4, book.isRead());
-            query.setInt(5, book.getId());
+            query.setInt(4, book.getId());
             query.executeUpdate();
+            
+            PreparedStatement query2 = conn.prepareStatement("UPDATE userbook SET hasRead=?"
+                    + " WHERE book_id=?");
+            //Not updating owner, bookmarks can't change owner
+            query2.setBoolean(1, book.isRead());
+            query2.setInt(2, book.getId());
+            query2.executeUpdate();
+            
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -153,15 +161,17 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     @Override
     public Bookmark getBookmarkById(int id) {
         try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("SELECT * FROM books WHERE id=?");
+            PreparedStatement query = conn.prepareStatement("SELECT * FROM books, userbook"
+                    + " WHERE books.id = userbook.book_id"
+                    + " AND books.id=?");
             query.setInt(1, id);
             ResultSet results = query.executeQuery();
             
             if (results.next()) { // Expecting 0-1 results
                 Bookmark book = new Book(results.getString("title"),
                         results.getString("author"), results.getString("isbn"));
-                book.setId(results.getInt("id"));
-                book.setIsRead(results.getBoolean("isRead"));
+                book.setId(results.getInt("books.id"));
+                book.setIsRead(results.getBoolean("hasRead"));
                 return book;
             }
         } catch (SQLException e) {
@@ -222,6 +232,55 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             PreparedStatement query = conn.prepareStatement("UPDATE users SET displayName=? WHERE id=?");
             query.setString(1, user.getDisplayName());
             query.setInt(2, user.getId());
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
+    }
+
+    @Override
+    public void deleteBookmark(int bookId, boolean permanent) {
+        try (Connection conn = db.getConnection()) {
+            if (permanent) {                
+                PreparedStatement query2 = conn.prepareStatement("DELETE FROM userbook"
+                        + " WHERE book_id = ?");
+                query2.setInt(1, bookId);
+                query2.executeUpdate();
+                
+                PreparedStatement query = conn.prepareStatement("DELETE FROM books"
+                        + " WHERE books.id = ?");
+                query.setInt(1, bookId);
+                query.executeUpdate();                            
+                
+            } else {
+                PreparedStatement query = conn.prepareStatement("UPDATE books SET onList=?"
+                        + " WHERE books.id = ?");
+                query.setBoolean(1, false);
+                query.setInt(2, bookId);
+                query.executeUpdate();
+            }
+                       
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
+    }
+    
+    @Override
+    public boolean validateOwner(int userId, int bookmarkId) {
+        try (Connection conn = db.getConnection()) {
+            PreparedStatement query = conn.prepareStatement("SELECT * FROM userbook"
+                    + " WHERE book_id = ?"
+                    + " AND user_id=?");
+            query.setInt(1, bookmarkId);
+            query.setInt(2, userId);
+            ResultSet results = query.executeQuery();
+            
+            boolean isOwner = false;
+            if (results.next()) { // Expecting 0-1 results
+                isOwner = results.getBoolean("owner");
+            }
+            
+            return isOwner;
+            
         } catch (SQLException e) {
             throw new Error(e);
         }
