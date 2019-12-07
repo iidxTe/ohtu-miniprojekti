@@ -16,15 +16,15 @@
         <form th:action="@{/editBookmark/{id}(id=${editableBook.getId()})}" method="POST">           
 
             <div>
-                Merkitse luetuksi:<input type="checkbox" name="isRead" th:checked="${editableBook.isRead()}"/>
+                Merkitse luetuksi:<input type="checkbox" name="isRead" th:checked="${editableBook.isRead()}" id="checkbox"/>
             </div>
                         
-            <input type="submit" value="Muokkaa"/>
+            <input type="submit" value="Muokkaa" id="muokkaa"/>
                 
         </form>
     
          <form th:action="@{/deleteBookmark/{id}(id=${editableBook.getId()})}" method="POST">                    
-            <input type="submit" value="Poista"/>
+            <input type="submit" value="Poista" id="delete"/>
         </form>
       
     </body>

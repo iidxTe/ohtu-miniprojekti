@@ -14,7 +14,7 @@
         <br>
 
         <form th:action="@{/logout}" method="POST"> 
-            <input type="submit" value="Kirjaudu ulos"/> 
+            <input type="submit" id="logout" value="Kirjaudu ulos"/> 
         </form>
 
         <ul>
@@ -24,7 +24,7 @@
                 <div><span th:if="${book.getIsbn().isEmpty()}" ></span></div>
                 <div><span th:unless="${book.getIsbn().isEmpty()}" th:text=" 'ISBN: ' + ${book.getIsbn()} ">isbn</span></div>
                 <div>Luettu: <span th:text="${book.isRead()} ? 'kyllä' : 'ei'">luettu</span></div>
-                <a th:href="@{/editBookmark/{id}(id=${book.getId()})}">Muokkaa</a>
+                <a th:href="@{/editBookmark/{id}(id=${book.getId()})}" id="editBook">Muokkaa</a>
             </li>
         </ul>
 
@@ -40,13 +40,13 @@
                 </option>
             </select><br/>
             <span>Otsikko:</span><br/>
-            <input type="text" name="title" required="true"/><br/>
+            <input type="text" id="title" name="title" required="true"/><br/>
             <span>Kirjoittaja:</span><br/>
-            <input type="text" name="author" required="true"/><br/>
+            <input type="text" id="author" name="author" required="true"/><br/>
             <span>ISBN:</span><br/>
-            <input type="text" name="isbn"/><br/>
+            <input type="text" id="isbn" name="isbn"/><br/>
 
-            <input type="submit" value="Lisää!"/>
+            <input type="submit" id="addBook" value="Lisää!"/>
         </form>
 
 
