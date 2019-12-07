@@ -49,7 +49,7 @@ public class BookmarkService {
     }
 
     public List<Bookmark> listAllByUser(User user) {
-        return dao.getAllBookmarksByUser(user);
+        return dao.getVisibleBookmarks(user);
     }
     
     public void deleteBookmark(int id, User user) {

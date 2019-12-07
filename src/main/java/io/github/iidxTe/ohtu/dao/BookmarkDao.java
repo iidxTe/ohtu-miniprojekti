@@ -9,7 +9,21 @@ import java.util.List;
 
 public interface BookmarkDao {
 
-    List<Bookmark> getAllBookmarksByUser(User user);
+    /**
+     * Gets bookmarks owned by given user. They may additionally see
+     * bookmarks of their group members, which can be gotten with
+     * {@link #getVisibleBookmarks(User)}.
+     * @param user User.
+     * @return Own bookmarks.
+     */
+    List<Bookmark> getOwnedBookmarks(User user);
+    
+    /**
+     * Gets all bookmarks visible to given user.
+     * @param user User.
+     * @return All their bookmarks, and bookmarks of their reader group.
+     */
+    List<Bookmark> getVisibleBookmarks(User user);
 
     void addBookmark(User user, Bookmark bookmark);
     

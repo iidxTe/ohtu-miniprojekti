@@ -1,5 +1,7 @@
 package io.github.iidxTe.ohtu.dao;
 
+import java.util.List;
+
 import io.github.iidxTe.ohtu.model.User;
 
 public interface UserDao {
@@ -10,6 +12,13 @@ public interface UserDao {
 	 * @return An user.
 	 */
 	User getUser(String name);
+	
+	/**
+	 * Gets all users that are in given group.
+	 * @param group Group name.
+	 * @return List of users, possibly empty.
+	 */
+	List<User> getUsersByGroup(String group);
 	
 	/**
 	 * Creates a new user.

@@ -1,7 +1,9 @@
 package io.github.iidxTe.ohtu.dao;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -30,8 +32,13 @@ public class MapUserDao implements UserDao {
 
     @Override
     public User createUser(String name, String password) {
-        // TODO Auto-generated method stub
-        return null;
+        return new User(name); // Ignore password
+    }
+
+    @Override
+    public List<User> getUsersByGroup(String group) {
+        return users.values().stream().filter(
+                user -> group.equals(user.getGroup())).collect(Collectors.toList());
     }
 
 }

@@ -4,7 +4,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
-import io.github.iidxTe.ohtu.dao.ListDao;
+import io.github.iidxTe.ohtu.dao.ListBookmarkDao;
 import io.github.iidxTe.ohtu.domain.BookmarkService;
 import io.github.iidxTe.ohtu.model.Book;
 import io.github.iidxTe.ohtu.model.Bookmark;
@@ -20,19 +20,19 @@ public class Stepdefs {
 
     public Stepdefs() {
         service = new BookmarkService();
-        service.setDao(new ListDao());
+        service.setDao(new ListBookmarkDao());
         user = new User("test");
         user.setId(0);
     }
     
     @Given ("the list is empty")
     public void theListIsEmpty() {
-        service.setDao(new ListDao());
+        service.setDao(new ListBookmarkDao());
     }
 
     @Given ("the list is not empty")
     public void theListIsNotEmpty() {
-        service.setDao(new ListDao());
+        service.setDao(new ListBookmarkDao());
         service.createBook(user, "Eeva Virtanen", "Tosi hyvä kirja", "13579");
     }
 

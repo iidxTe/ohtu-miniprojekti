@@ -77,7 +77,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     }
     
     @Override
-    public List<Bookmark> getAllBookmarksByUser(User user) {
+    public List<Bookmark> getOwnedBookmarks(User user) {
         try (Connection conn = db.getConnection()) {
             PreparedStatement query = conn.prepareStatement("SELECT books.id, books.title, books.author, books.isbn, userbook.hasRead"
                     + "    FROM books, userbook WHERE books.id = userbook.book_id"
@@ -102,6 +102,24 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             
         } catch (SQLException e) {
             throw new Error(e);
+        }
+    }
+    
+    @Override
+    public List<Bookmark> getVisibleBookmarks(User user) {
+        if (user.getGroup() == null) { // User is not in group, so we'll take only their own bookmarks
+            return getOwnedBookmarks(user);
+        } else {
+            // Get group members, including the user themself
+            List<User> groupMembers = getUsersByGroup(user.getGroup());
+            
+            // Get ALL books from ALL members - in a not terribly efficient way
+            // Each user comes only once, so no need to worry about duplicate bookmarks
+            List<Bookmark> bookmarks = new ArrayList<>();
+            for (User member : groupMembers) {
+                bookmarks.addAll(getOwnedBookmarks(member));
+            }
+            return bookmarks;
         }
     }
 
@@ -179,6 +197,20 @@ public class DatabaseDao implements BookmarkDao, UserDao {
         }
         return null;
     }
+    
+    /**
+     * Assembles an user from data returned from database.
+     * @param results Database result set.
+     * @return An user.
+     * @throws SQLException Data returned was not what we expected.
+     */
+    private User userFromDb(ResultSet results) throws SQLException {
+        User user = new User(results.getString("name"));
+        user.setId(results.getInt("id"));
+        user.setDisplayName(results.getString("displayName"));
+        user.setGroup(results.getString("readerGroup"));
+        return user;
+    }
 
     @Override
     public User getUser(String name) {
@@ -188,15 +220,30 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             ResultSet results = query.executeQuery();
             
             if (results.next()) {
-                User user = new User(name);
-                user.setId(results.getInt("id"));
-                user.setDisplayName(results.getString("displayName"));
-                return user;
+                return userFromDb(results);
             }
         } catch (SQLException e) {
             throw new Error(e);
         }
         return null;
+    }
+    
+    @Override
+    public List<User> getUsersByGroup(String group) {
+        List<User> users = new ArrayList<>();
+        try (Connection conn = db.getConnection()) {
+            PreparedStatement query = conn.prepareStatement("SELECT * FROM users WHERE readerGroup=?");
+            query.setString(1, group);
+            ResultSet results = query.executeQuery();
+            
+            // Read all users with matching group
+            while (results.next()) {
+                users.add(userFromDb(results));
+            }
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
+        return users; // Return users, if any
     }
 
     @Override

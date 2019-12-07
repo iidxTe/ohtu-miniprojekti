@@ -1,6 +1,6 @@
 package io.github.iidxTe.ohtu;
 
-import io.github.iidxTe.ohtu.dao.ListDao;
+import io.github.iidxTe.ohtu.dao.ListBookmarkDao;
 import io.github.iidxTe.ohtu.domain.BookmarkService;
 import io.github.iidxTe.ohtu.model.Book;
 import io.github.iidxTe.ohtu.model.User;
@@ -15,7 +15,7 @@ public class BookmarkServiceTest {
 
     public BookmarkServiceTest() {
         service = new BookmarkService();
-        service.setDao(new ListDao());
+        service.setDao(new ListBookmarkDao());
         user = new User("test");
         user.setId(0);
     }

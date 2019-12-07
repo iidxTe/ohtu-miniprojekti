@@ -6,19 +6,20 @@ import io.github.iidxTe.ohtu.model.Bookmark;
 import io.github.iidxTe.ohtu.model.User;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
-public class ListDao implements BookmarkDao {
+public class ListBookmarkDao implements BookmarkDao {
 
     private List<Bookmark> list;
 
-    public ListDao() {
+    public ListBookmarkDao() {
         this.list = new ArrayList<>();
     }   
 
     @Override
-    public List<Bookmark> getAllBookmarksByUser(User user) {
+    public List<Bookmark> getOwnedBookmarks(User user) {
         return list;
     }
 
@@ -46,13 +47,24 @@ public class ListDao implements BookmarkDao {
     }
 
     @Override
-    public void deleteBookmark(int id, boolean permanent) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<Bookmark> getVisibleBookmarks(User user) {
+        return list; // No multiuser support
+    }
+
+    @Override
+    public void deleteBookmark(int bookId, boolean permanent) {
+        Iterator<Bookmark> it = list.iterator();
+        while (it.hasNext()) {
+            if (it.next().getId() == bookId) {
+                it.remove();
+                return;
+            }
+        }
     }
 
     @Override
     public boolean isOwner(int userId, int bookmarkId) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return true; // No multiuser support
     }
 
 }
