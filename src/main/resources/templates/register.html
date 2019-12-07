@@ -8,14 +8,19 @@
         <form th:action="@{/register}" method="POST">
             <fieldset>
                 <legend>Rekisteröidy</legend>
-                    <div><span th:if="${error}"> Virhe</span></div>
-                    <label>Käyttäjätunnus:</label>
-                    <input type="text" id="username" name="username"><br/>
+                <div th:if="${param.error}">
+                    Käyttäjätunnus on jo olemassa.
+                </div>
+                <div th:if="${param.error2}">
+                    Käyttäjänimen ja salasanan tulee olla vähintään 4 merkkiä pitkiä.
+                </div>
+                <label>Käyttäjätunnus:</label>
+                <input type="text" id="username" name="username"><br/>
 
-                    <label>Salasana:</label>
-                    <input type="password" id="password" name="password"><br/>
+                <label>Salasana:</label>
+                <input type="password" id="password" name="password"><br/>
 
-                    <input type="submit" id="register" value="Luo uusi"/>
+                <input type="submit" id="register" value="Luo uusi"/>
             </fieldset>
 
         </form>

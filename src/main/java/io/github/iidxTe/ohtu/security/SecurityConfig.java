@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().loginPage("/login").permitAll() // Unauthorized requests redirect here
                 .and()
-                .logout(); // Enable default logout mechanism
+                .logout().permitAll(); // Enable default logout mechanism
                 
 
     }

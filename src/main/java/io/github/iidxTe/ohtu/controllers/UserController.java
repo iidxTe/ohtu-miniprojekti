@@ -32,19 +32,19 @@ public class UserController {
     @PostMapping("/register")
     public String register(Model model, @RequestParam String username, @RequestParam String password) {
         if (dao.getUser(username) != null) {
-            model.addAttribute("error","käyttäjätunnus on jo olemassa");
-            return "redirect:register";
+            model.addAttribute("error", "käyttäjätunnus on jo olemassa");
+            return "redirect:register?error";
         }
         if (username.length() < 4 || password.length() < 4) {
-            model.addAttribute("error","liian lyhyt käyttäjäninmi tai salasana");
-            return "redirect:register";
+            model.addAttribute("error", "liian lyhyt käyttäjäninmi tai salasana");
+            return "redirect:register?error2";
         }
         dao.createUser(username, password);
         return "redirect:login"; // Allow newly created user to login
     }
 
     // We're processing login attempts with tools provided by Spring
-
+    
     // TODO user settings: EI toimi vielä
     @GetMapping("/settings")
     public String settingsForm(Model model) {
