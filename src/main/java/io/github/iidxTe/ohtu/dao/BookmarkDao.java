@@ -19,6 +19,12 @@ public interface BookmarkDao {
     
     void deleteBookmark(int bookId, boolean permanent);
     
-    boolean validateOwner(int userId, int bookmarkId);
+    /**
+     * Checks if user with given id owns the bookmark with given id.
+     * @param userId User id.
+     * @param bookmarkId Bookmark id.
+     * @return Whether the user owns the bookmark or not.
+     */
+    boolean isOwner(int userId, int bookmarkId);
 
 }

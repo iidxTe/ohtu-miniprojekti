@@ -51,7 +51,7 @@ public class ListDao implements BookmarkDao {
     }
 
     @Override
-    public boolean validateOwner(int userId, int bookmarkId) {
+    public boolean isOwner(int userId, int bookmarkId) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

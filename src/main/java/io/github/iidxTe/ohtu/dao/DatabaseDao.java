@@ -265,7 +265,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     }
     
     @Override
-    public boolean validateOwner(int userId, int bookmarkId) {
+    public boolean isOwner(int userId, int bookmarkId) {
         try (Connection conn = db.getConnection()) {
             PreparedStatement query = conn.prepareStatement("SELECT * FROM userbook"
                     + " WHERE book_id = ?"

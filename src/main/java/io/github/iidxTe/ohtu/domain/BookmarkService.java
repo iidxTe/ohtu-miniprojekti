@@ -53,7 +53,7 @@ public class BookmarkService {
     }
     
     public void deleteBookmark(int id, User user) {
-        if ((user.getGroup() == null || user.getGroup().isEmpty()) && dao.validateOwner(user.getId(), id) ) {
+        if ((user.getGroup() == null || user.getGroup().isEmpty()) && dao.isOwner(user.getId(), id) ) {
             //if user doesn't belong to any group, bookmark will be deleted permanently
             dao.deleteBookmark(id, true);
         } else {
