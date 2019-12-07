@@ -24,6 +24,7 @@
                 <div><span th:if="${book.getIsbn().isEmpty()}" ></span></div>
                 <div><span th:unless="${book.getIsbn().isEmpty()}" th:text=" 'ISBN: ' + ${book.getIsbn()} ">isbn</span></div>
                 <div>Luettu: <span th:text="${book.isRead()} ? 'kyllä' : 'ei'">luettu</span></div>
+                <div>Added by: <span th:text="${book.getCreator()}">creator</span></div>
                 <a th:href="@{/editBookmark/{id}(id=${book.getId()})}" id="editBook">Muokkaa</a>
             </li>
         </ul>

@@ -1,16 +1,25 @@
-
 package io.github.iidxTe.ohtu.model;
 
-
 public class Book extends Bookmark {
+
     private String author;
     private String isbn;
+    private String creator;
 
-    public Book(String title, String author, String isbn) {
+    public Book(String title, String author, String isbn, String creator) {
         super(title);
         this.author = author;
         this.isbn = isbn;
+        this.creator = creator;
     }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public String getCreator() {
+        return creator;
+    }        
 
     public String getAuthor() {
         return author;
@@ -28,6 +37,6 @@ public class Book extends Bookmark {
     @Override
     public String getType() {
         return "book";
-    }        
+    }
 
 }

@@ -29,7 +29,7 @@ public class BookTest {
 
     @Test
     public void constructorCreatesNewBook() {
-        Book book = new Book("abc", "matti", "123");
+        Book book = new Book("abc", "matti", "123", "matti");
         
         assertEquals("abc", book.getTitle());
         assertEquals("matti", book.getAuthor());

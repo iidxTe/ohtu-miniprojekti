@@ -37,7 +37,7 @@ public class BookmarkService {
     }
         
     public Book createBook(User owner, String title, String author, String isbn) {
-        Book book = new Book(title, author, isbn);
+        Book book = new Book(title, author, isbn, owner.getDisplayName());
         dao.addBookmark(owner, book);
         return book;
     }

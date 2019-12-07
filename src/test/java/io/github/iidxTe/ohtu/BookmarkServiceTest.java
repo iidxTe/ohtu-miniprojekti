@@ -38,15 +38,15 @@ public class BookmarkServiceTest {
 
     @Test
     public void listAllWithOneItemAddedReturnsThatItem() {
-        Book book = new Book("abc", "matti", "123");
+        Book book = new Book("abc", "matti", "123", "test");
         service.createBook(user, "abc", "matti", "123");
         assertEquals(book.toString(), service.listAllByUser(user).get(0).toString());
     }
 
     @Test
     public void listAllWithMultipleItemsAddedReturnsThoseItems() {
-        Book book = new Book("abc", "matti", "123");
-        Book book2 = new Book("ihmemaa", "liisa", "456");
+        Book book = new Book("abc", "matti", "123", "test");
+        Book book2 = new Book("ihmemaa", "liisa", "456", "test");
         service.createBook(user, "abc", "matti", "123");
         service.createBook(user, "ihmemaa", "liisa", "456");
         assertEquals(book.toString(), service.listAllByUser(user).get(0).toString());

@@ -44,6 +44,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
                     + "    title VARCHAR,"
                     + "    author VARCHAR,"
                     + "    isbn VARCHAR,"
+                    + "    creator VARCHAR,"
                     + "    onList BOOLEAN"
                     + ")");
             query.executeUpdate();
@@ -79,7 +80,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     @Override
     public List<Bookmark> getOwnedBookmarks(User user) {
         try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("SELECT books.id, books.title, books.author, books.isbn, userbook.hasRead"
+            PreparedStatement query = conn.prepareStatement("SELECT books.id, books.title, books.author, books.isbn, books.creator, userbook.hasRead"
                     + "    FROM books, userbook WHERE books.id = userbook.book_id"
                     + "    AND userbook.user_id = ?"
                     + "    AND userbook.owner = ?");
@@ -92,7 +93,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             
             while (results.next()) {
                 Bookmark book = new Book(results.getString("books.title"),
-                        results.getString("author"), results.getString("books.isbn"));
+                        results.getString("author"), results.getString("books.isbn"), results.getString("books.creator"));
                 book.setId(results.getInt("books.id"));
                 book.setIsRead(results.getBoolean("userbook.hasRead"));
                 bookmarks.add(book);
@@ -127,12 +128,13 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     public void addBookmark(User user, Bookmark bookmark) {
         try (Connection conn = db.getConnection()) {
             Book book = (Book) bookmark;
-            PreparedStatement query = conn.prepareStatement("INSERT INTO books (title, author, isbn, onList) VALUES (?,?,?,?)",
+            PreparedStatement query = conn.prepareStatement("INSERT INTO books (title, author, isbn, creator, onList) VALUES (?,?,?,?,?)",
                     Statement.RETURN_GENERATED_KEYS);
             query.setString(1, book.getTitle());
             query.setString(2, book.getAuthor());
             query.setString(3, book.getIsbn());
-            query.setBoolean(4, true);
+            query.setString(4, user.getDisplayName());
+            query.setBoolean(5, true);
             query.executeUpdate();
             
             try (ResultSet keys = query.getGeneratedKeys()) {
@@ -187,7 +189,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             
             if (results.next()) { // Expecting 0-1 results
                 Bookmark book = new Book(results.getString("title"),
-                        results.getString("author"), results.getString("isbn"));
+                        results.getString("author"), results.getString("isbn"), results.getString("creator"));
                 book.setId(results.getInt("books.id"));
                 book.setIsRead(results.getBoolean("hasRead"));
                 return book;
