@@ -36,7 +36,7 @@ public class UserController {
             return "redirect:register?error";
         }
         if (username.length() < 4 || password.length() < 4) {
-            model.addAttribute("error", "liian lyhyt käyttäjäninmi tai salasana");
+            model.addAttribute("error", "liian lyhyt käyttäjänimi tai salasana");
             return "redirect:register?error2";
         }
         dao.createUser(username, password);
@@ -45,9 +45,17 @@ public class UserController {
 
     // We're processing login attempts with tools provided by Spring
     
-    // TODO user settings: EI toimi vielä
+
     @GetMapping("/settings")
     public String settingsForm(Model model) {
         return "settings";
     }
+
+    /* Tämä vielä ihan kesken:
+    @PostMapping("/settings")
+    public String settings(Model model, @RequestParam String username, @RequestParam String password) {
+
+        dao.updateUser(User user);
+        return "redirect:index";
+    } */
 }
