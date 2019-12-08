@@ -1,5 +1,8 @@
 package io.github.iidxTe.ohtu.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * User in our application.
  *
@@ -25,6 +28,13 @@ public class User {
 	
 	public User(String name) {
 		this.name = name;
+	}
+	
+	public User(ResultSet resultSet) throws SQLException {
+		this.id = resultSet.getInt("id");
+		this.name = resultSet.getString("name");
+		this.displayName = resultSet.getString("displayName");
+		this.group = resultSet.getString("readerGroup");
 	}
 
 	public int getId() {

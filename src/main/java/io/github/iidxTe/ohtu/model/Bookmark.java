@@ -1,6 +1,9 @@
 
 package io.github.iidxTe.ohtu.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public abstract class Bookmark {
     
     /**
@@ -17,6 +20,12 @@ public abstract class Bookmark {
     public Bookmark(String title) {
         this.title = title;
         this.isRead = false;
+    }
+    
+    public Bookmark(ResultSet resultSet) throws SQLException {
+    	this.id = resultSet.getInt("id");
+    	this.title = resultSet.getString("title");
+    	this.isRead = resultSet.getBoolean("hasRead");
     }
 
     public int getId() {
