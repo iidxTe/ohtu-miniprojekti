@@ -6,11 +6,16 @@
 
     <body>
 
-        <h1>Asetukset</h1>
+        <h1>Käyttäjän asetukset</h1>
 
-        
-        <form th:action="@{/register}" method="POST">
+        <form th:action="@{/settings}" method="POST">
+                <label>Vaihda nimeä:</label>
+                <input type="text" id="displayname" name="displayname"><br/>
 
+                <label>Liity ryhmään / luo ryhmä:</label>
+                <input type="text" id="group" name="group"><br/>
+
+                <input type="submit" id="settings" value="Tallenna muutokset"/>
         </form>
 
     </body>

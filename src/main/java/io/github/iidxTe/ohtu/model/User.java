@@ -21,7 +21,7 @@ public class User {
 	 */
 	private String displayName;
         
-        private String group;
+    private String group;
 	
 	public User(String name) {
 		this.name = name;
@@ -47,12 +47,12 @@ public class User {
 		this.displayName = displayName;
 	}
         
-        public String getGroup() {
-            return group;
-        }
+    public String getGroup() {
+        return group;
+    }
         
-        public void setGroup(String group) {
-            this.group = group;
-        }
+    public void setGroup(String group) {
+		this.group = group;
+	}
 	
 }

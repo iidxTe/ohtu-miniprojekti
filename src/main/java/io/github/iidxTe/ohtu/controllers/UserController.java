@@ -9,6 +9,9 @@ import io.github.iidxTe.ohtu.dao.UserDao;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import io.github.iidxTe.ohtu.model.User;
+import java.security.Principal;
+
 /**
  * Registration, logging in/out and user settings.
  *
@@ -51,11 +54,13 @@ public class UserController {
         return "settings";
     }
 
-    /* Tämä vielä ihan kesken:
     @PostMapping("/settings")
-    public String settings(Model model, @RequestParam String username, @RequestParam String password) {
+    public String settings(Principal login, Model model, @RequestParam String displayname, @RequestParam String group) {
+        User user = dao.getUser(login.getName());
+        user.setDisplayName(displayname);
+        user.setGroup(group);
 
-        dao.updateUser(User user);
-        return "redirect:index";
-    } */
+        dao.updateUser(user);
+        return "redirect:/";
+    }
 }
