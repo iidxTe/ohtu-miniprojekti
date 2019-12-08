@@ -278,9 +278,12 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     @Override
     public void updateUser(User user) {
         try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("UPDATE users SET displayName=? WHERE id=?");
+            PreparedStatement query = conn.prepareStatement("UPDATE users SET displayName=?, readerGroup=? WHERE id=?");
             query.setString(1, user.getDisplayName());
-            query.setInt(2, user.getId());
+            query.setString(2, user.getGroup());
+            query.setInt(3, user.getId());
+            
+            query.executeUpdate();
         } catch (SQLException e) {
             throw new Error(e);
         }
