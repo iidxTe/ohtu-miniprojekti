@@ -51,9 +51,8 @@ jacocoTestReport {
         html.enabled true
     }
         afterEvaluate {
-        classDirectories = files(classDirectories.files.collect {
-            fileTree(dir: it,
-                    exclude: ['io/github/iidxTe/ohtu/security/**'])
-        })
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['io/github/iidxTe/ohtu/security/**'])
+        }))
     }
 }
