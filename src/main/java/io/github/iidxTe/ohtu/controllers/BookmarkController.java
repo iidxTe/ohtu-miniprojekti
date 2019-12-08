@@ -36,6 +36,7 @@ public class BookmarkController {
         User user = userDao.getUser(login.getName());
 
         model.addAttribute("user", user.getDisplayName());
+        model.addAttribute("group", user.getGroup());
         
         List<Bookmark> books;
         if (user.getGroup() != null) {

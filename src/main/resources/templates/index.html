@@ -7,11 +7,15 @@
     <body>
         <h1>Lukuvinkit</h1>
 
-        <div>Tervetuloa, <span th:text="${user}">user</span></div>
+        <div>
+            Tervetuloa, <span th:text="${user}">user</span>!
+            <span th:if="${group != null}" th:text="'Näet valitsemasi ryhmän ' + ${group} + ' lukuvinkit alla.'">Ryhmän lukuvinkit</span>
+            <span th:if="${group == null}" th:text="'Näet alla omat lukuvinkkisi.'">Omat lukuvinkit</span>
+        </div>
 
-        <br>
-        <a href="/settings">Tästä pääset asetuksiin</a>
-        <br>
+        <p>
+            Voit vaihtaa nimeäsi tai ryhmääsi <a href="/settings">asetuksissa</a>
+        </p>
 
         <form th:action="@{/logout}" method="POST"> 
             <input type="submit" id="logout" value="Kirjaudu ulos"/> 

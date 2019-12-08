@@ -50,15 +50,20 @@ public class UserController {
     
 
     @GetMapping("/settings")
-    public String settingsForm(Model model) {
+    public String settingsForm(Principal login, Model model) {
+        User user = dao.getUser(login.getName());
+        model.addAttribute("displayName", user.getDisplayName());
+        model.addAttribute("group", user.getGroup());
         return "settings";
     }
 
     @PostMapping("/settings")
-    public String settings(Principal login, Model model, @RequestParam String displayname, @RequestParam String group) {
+    public String settings(Principal login, Model model, @RequestParam String displayName, @RequestParam String group) {
         User user = dao.getUser(login.getName());
-        if (displayname != null && !displayname.isEmpty()) user.setDisplayName(displayname);
-        if (group != null && !group.isEmpty()) user.setGroup(group);
+        if (displayName.isEmpty()) displayName = user.getName();
+        user.setDisplayName(displayName);
+        if (group.isEmpty()) group = null;
+        user.setGroup(group);
 
         dao.updateUser(user);
         return "redirect:/";

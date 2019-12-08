@@ -9,13 +9,24 @@
         <h1>Käyttäjän asetukset</h1>
 
         <form th:action="@{/settings}" method="POST">
-                <label>Vaihda nimeä:</label>
-                <input type="text" id="displayname" name="displayname"><br/>
-
-                <label>Liity ryhmään / luo ryhmä:</label>
-                <input type="text" id="group" name="group"><br/>
-
-                <input type="submit" id="settings" value="Tallenna muutokset"/>
+            <fieldset>
+            	<legend>Vaihda nimesi</legend>
+            	Voit vaihtaa etusivulla näytettävää nimeä. Kirjautumiseen
+            	käytettävä nimi pysyy samana tästä riippumatta.
+            	
+                <label>Uusi nimi:</label>
+                <input type="text" id="displayName" name="displayName" th:value="${displayName}"/>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Liity ryhmään</legend>
+                Kirjoita tähän saamasi ryhmän nimi liittyäksesi siihen.
+                Kentän tyhjentäminen poistaa sinut nykyisestä ryhmästäsi.
+                
+                <label>Ryhmä:</label>
+                <input type="text" id="group" name="group" th:value="${group}">
+            </fieldset>
+            <input type="submit" id="settings" value="Tallenna muutokset"/>
         </form>
 
     </body>
