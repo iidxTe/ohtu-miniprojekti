@@ -39,38 +39,43 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     private void init() {
         try (Connection conn = db.getConnection()) {
             // Books table
-            PreparedStatement query = conn.prepareStatement("CREATE TABLE IF NOT EXISTS books ("
+            try (PreparedStatement query = conn.prepareStatement("CREATE TABLE IF NOT EXISTS books ("
                     + "    id SERIAL PRIMARY KEY,"
                     + "    title VARCHAR,"
                     + "    author VARCHAR,"
                     + "    isbn VARCHAR,"
                     + "    creator VARCHAR,"
                     + "    onList BOOLEAN"
-                    + ")");
-            query.executeUpdate();
+                    + ")")) {
+            	
+                query.executeUpdate();
+            }
             
             // Users table
-            PreparedStatement query2 = conn.prepareStatement("CREATE TABLE IF NOT EXISTS users ("
+            try (PreparedStatement query = conn.prepareStatement("CREATE TABLE IF NOT EXISTS users ("
                     + "    id SERIAL PRIMARY KEY,"
                     + "    name VARCHAR NOT NULL,"
                     + "    password VARCHAR NOT NULL,"
                     + "    displayName VARCHAR NOT NULL,"
                     + "    readerGroup VARCHAR"
-                    + ")");
-            query2.executeUpdate();
+                    + ")")) {
+            	
+                query.executeUpdate();
+            }
             
             //UserBook table
             
-            PreparedStatement query3 = conn.prepareStatement("CREATE TABLE IF NOT EXISTS userbook ("
+            try (PreparedStatement query = conn.prepareStatement("CREATE TABLE IF NOT EXISTS userbook ("
                     + "    id SERIAL PRIMARY KEY,"
                     + "    user_id INTEGER NOT NULL,"
                     + "    book_id INTEGER NOT NULL,"
-                    + "    owner BOOLEAN,"
                     + "    hasRead BOOLEAN,"
                     + "    FOREIGN KEY (user_id) REFERENCES users(id),"
                     + "    FOREIGN KEY (book_id) REFERENCES books(id)"
-                    + ")");
-            query3.executeUpdate();
+                    + ")")) {
+            	
+                query.executeUpdate();
+            }
             
         } catch (SQLException e) {
             throw new Error(e);
@@ -79,27 +84,21 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     
     @Override
     public List<Bookmark> getOwnedBookmarks(User user) {
-        try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("SELECT books.id, books.title, books.author, books.isbn, books.creator, userbook.hasRead"
-                    + "    FROM books, userbook WHERE books.id = userbook.book_id"
-                    + "    AND userbook.user_id = ?"
-                    + "    AND userbook.owner = ?");
+        try (Connection conn = db.getConnection(); PreparedStatement query = conn.prepareStatement("SELECT b.id, title, author, isbn, creator, hasRead FROM userbook u"
+                + " LEFT JOIN books b ON b.id = u.id"
+                + " WHERE u.user_id = ?")) {
+        	
             query.setInt(1, user.getId());
-            query.setBoolean(2, true);
             
-            ResultSet results = query.executeQuery();
-            
-            List<Bookmark> bookmarks = new ArrayList<>();
-            
-            while (results.next()) {
-                Bookmark book = new Book(results.getString("books.title"),
-                        results.getString("author"), results.getString("books.isbn"), results.getString("books.creator"));
-                book.setId(results.getInt("books.id"));
-                book.setIsRead(results.getBoolean("userbook.hasRead"));
-                bookmarks.add(book);
+            try (ResultSet results = query.executeQuery()) {
+	            List<Bookmark> bookmarks = new ArrayList<>();
+	            
+	            while (results.next()) {
+	                bookmarks.add(new Book(results));
+	            }
+	
+	            return bookmarks;
             }
-
-            return bookmarks;
             
         } catch (SQLException e) {
             throw new Error(e);
@@ -120,6 +119,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             for (User member : groupMembers) {
                 bookmarks.addAll(getOwnedBookmarks(member));
             }
+            
             return bookmarks;
         }
     }
@@ -127,28 +127,33 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     @Override
     public void addBookmark(User user, Bookmark bookmark) {
         try (Connection conn = db.getConnection()) {
+        	
             Book book = (Book) bookmark;
-            PreparedStatement query = conn.prepareStatement("INSERT INTO books (title, author, isbn, creator, onList) VALUES (?,?,?,?,?)",
-                    Statement.RETURN_GENERATED_KEYS);
-            query.setString(1, book.getTitle());
-            query.setString(2, book.getAuthor());
-            query.setString(3, book.getIsbn());
-            query.setString(4, user.getDisplayName());
-            query.setBoolean(5, true);
-            query.executeUpdate();
+            try (PreparedStatement query = conn.prepareStatement("INSERT INTO books (title, author, isbn, creator, onList) VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+            	
+	            query.setString(1, book.getTitle());
+	            query.setString(2, book.getAuthor());
+	            query.setString(3, book.getIsbn());
+	            query.setString(4, user.getDisplayName());
+	            query.setBoolean(5, true);
+	            
+	            query.executeUpdate();
+	            
+	            try (ResultSet keys = query.getGeneratedKeys()) {
+	            	
+	                keys.next();
+	                book.setId((int) keys.getLong(1));
+	            }
+	        }
             
-            try (ResultSet keys = query.getGeneratedKeys()) {
-                keys.next();
-                book.setId((int) keys.getLong(1));
+            try (PreparedStatement query = conn.prepareStatement("INSERT INTO userbook (user_id, book_id, hasRead) VALUES (?, ?, ?)")) {
+            	
+            	query.setInt(1, user.getId());
+	            query.setInt(2, book.getId());
+	            query.setBoolean(3, bookmark.isRead());
+	            
+	            query.executeUpdate();    
             }
-            
-            PreparedStatement query2 = conn.prepareStatement("INSERT INTO userbook (user_id, book_id, owner, hasRead) VALUES (?, ?, ?, ?)");
-            query2.setInt(1, user.getId());
-            query2.setInt(2, book.getId());
-            query2.setBoolean(3, true);
-            query2.setBoolean(4, false);
-            query2.executeUpdate();            
-            
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -158,20 +163,26 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     public void updateBookmark(Bookmark bookmark) {
         try (Connection conn = db.getConnection()) {
             Book book = (Book) bookmark;
-            PreparedStatement query = conn.prepareStatement("UPDATE books SET title=?, author=?, isbn=?"
-                    + " WHERE books.id=?");
-            query.setString(1, book.getTitle());
-            query.setString(2, book.getAuthor());
-            query.setString(3, book.getIsbn());
-            query.setInt(4, book.getId());
-            query.executeUpdate();
+            try (PreparedStatement query = conn.prepareStatement("UPDATE books SET title = ?, author = ?, isbn = ?"
+                    + " WHERE books.id = ?")) {
+            	
+	            query.setString(1, book.getTitle());
+	            query.setString(2, book.getAuthor());
+	            query.setString(3, book.getIsbn());
+	            query.setInt(4, book.getId());
+	            
+                query.executeUpdate();
+            }
             
-            PreparedStatement query2 = conn.prepareStatement("UPDATE userbook SET hasRead=?"
-                    + " WHERE book_id=?");
-            //Not updating owner, bookmarks can't change owner
-            query2.setBoolean(1, book.isRead());
-            query2.setInt(2, book.getId());
-            query2.executeUpdate();
+            try (PreparedStatement query = conn.prepareStatement("UPDATE userbook SET hasRead = ?"
+                    + " WHERE book_id = ?")) {
+            	
+	            //Not updating owner, bookmarks can't change owner
+            	query.setBoolean(1, book.isRead());
+            	query.setInt(2, book.getId());
+            	
+            	query.executeUpdate();
+            }
             
         } catch (SQLException e) {
             throw new Error(e);
@@ -181,70 +192,59 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     @Override
     public Bookmark getBookmarkById(int id) {
         try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("SELECT * FROM books, userbook"
-                    + " WHERE books.id = userbook.book_id"
-                    + " AND books.id=?");
-            query.setInt(1, id);
-            ResultSet results = query.executeQuery();
-            
-            if (results.next()) { // Expecting 0-1 results
-                Bookmark book = new Book(results.getString("title"),
-                        results.getString("author"), results.getString("isbn"), results.getString("creator"));
-                book.setId(results.getInt("books.id"));
-                book.setIsRead(results.getBoolean("hasRead"));
-                return book;
+            try (PreparedStatement query = conn.prepareStatement("SELECT u.id, title, author, isbn, creator, hasRead FROM userbook u"
+                    + " LEFT JOIN books b ON b.id = u.id"
+                    + " WHERE u.id = ?")) {
+            	
+	            query.setInt(1, id);
+	            
+	            try (ResultSet results = query.executeQuery()) {
+		            if (results.next()) {
+		                return new Book(results);
+		            }
+	            }
             }
         } catch (SQLException e) {
             throw new Error(e);
         }
+        
         return null;
-    }
-    
-    /**
-     * Assembles an user from data returned from database.
-     * @param results Database result set.
-     * @return An user.
-     * @throws SQLException Data returned was not what we expected.
-     */
-    private User userFromDb(ResultSet results) throws SQLException {
-        User user = new User(results.getString("name"));
-        user.setId(results.getInt("id"));
-        user.setDisplayName(results.getString("displayName"));
-        user.setGroup(results.getString("readerGroup"));
-        return user;
     }
 
     @Override
     public User getUser(String name) {
-        try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("SELECT * FROM users WHERE name=?");
-            query.setString(1, name);
-            ResultSet results = query.executeQuery();
+        try (Connection conn = db.getConnection(); PreparedStatement query = conn.prepareStatement("SELECT id, name, displayName, readerGroup FROM users WHERE name = ?")) {
+        	
+        	query.setString(1, name);
             
-            if (results.next()) {
-                return userFromDb(results);
+            try (ResultSet results = query.executeQuery()) {
+	            if (results.next()) {
+	                return new User(results);
+	            }
             }
         } catch (SQLException e) {
             throw new Error(e);
         }
+        
         return null;
     }
     
     @Override
     public List<User> getUsersByGroup(String group) {
         List<User> users = new ArrayList<>();
-        try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("SELECT * FROM users WHERE readerGroup=?");
-            query.setString(1, group);
-            ResultSet results = query.executeQuery();
+        try (Connection conn = db.getConnection(); PreparedStatement query = conn.prepareStatement("SELECT id, name, displayName, readerGroup FROM users WHERE readerGroup = ?")) {
             
-            // Read all users with matching group
-            while (results.next()) {
-                users.add(userFromDb(results));
+        	query.setString(1, group);
+            
+            try (ResultSet results = query.executeQuery()) {
+	            while (results.next()) {
+	                users.add(new User(results));
+	            }
             }
         } catch (SQLException e) {
             throw new Error(e);
         }
+        
         return users; // Return users, if any
     }
 
@@ -257,18 +257,20 @@ public class DatabaseDao implements BookmarkDao, UserDao {
         User user = new User(name);
         user.setDisplayName(name); // Initial display name is name
         
-        try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("INSERT INTO users (name,password,displayName) VALUES (?,?,?)",
-                    Statement.RETURN_GENERATED_KEYS);
+        try (Connection conn = db.getConnection();
+        		PreparedStatement query = conn.prepareStatement("INSERT INTO users (name, password, displayName) VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
+        	
             query.setString(1, user.getName());
             query.setString(2, passwordEncoder.encode(password));
             query.setString(3, user.getDisplayName());
+            
             query.executeUpdate();
             
             try (ResultSet keys = query.getGeneratedKeys()) {
                 keys.next();
                 user.setId((int) keys.getLong(1));
             }
+            
             return user;
         } catch (SQLException e) {
             throw new Error(e);
@@ -277,8 +279,9 @@ public class DatabaseDao implements BookmarkDao, UserDao {
 
     @Override
     public void updateUser(User user) {
-        try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("UPDATE users SET displayName=?, readerGroup=? WHERE id=?");
+        try (Connection conn = db.getConnection();
+        		PreparedStatement query = conn.prepareStatement("UPDATE users SET displayName = ?, readerGroup = ? WHERE id = ?")) {
+        	
             query.setString(1, user.getDisplayName());
             query.setString(2, user.getGroup());
             query.setInt(3, user.getId());
@@ -292,25 +295,29 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     @Override
     public void deleteBookmark(int bookId, boolean permanent) {
         try (Connection conn = db.getConnection()) {
-            if (permanent) {                
-                PreparedStatement query2 = conn.prepareStatement("DELETE FROM userbook"
-                        + " WHERE book_id = ?");
-                query2.setInt(1, bookId);
-                query2.executeUpdate();
+            if (permanent) {
+                try (PreparedStatement query = conn.prepareStatement("DELETE FROM userbook WHERE book_id = ?")) {
+                	
+                	query.setInt(1, bookId);
+                	
+            		query.executeUpdate();
+                }
                 
-                PreparedStatement query = conn.prepareStatement("DELETE FROM books"
-                        + " WHERE books.id = ?");
-                query.setInt(1, bookId);
-                query.executeUpdate();                            
-                
+                try (PreparedStatement query = conn.prepareStatement("DELETE FROM books WHERE books.id = ?")) {
+                	
+                    query.setInt(1, bookId);
+                    
+                    query.executeUpdate();      
+                }
             } else {
-                PreparedStatement query = conn.prepareStatement("UPDATE books SET onList=?"
-                        + " WHERE books.id = ?");
-                query.setBoolean(1, false);
-                query.setInt(2, bookId);
-                query.executeUpdate();
+                try (PreparedStatement query = conn.prepareStatement("UPDATE books SET onList = ? WHERE books.id = ?")) {
+                	
+	                query.setBoolean(1, false);
+	                query.setInt(2, bookId);
+	                
+	                query.executeUpdate();
+                }
             }
-                       
         } catch (SQLException e) {
             throw new Error(e);
         }
@@ -318,24 +325,22 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     
     @Override
     public boolean isOwner(int userId, int bookmarkId) {
-        try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("SELECT * FROM userbook"
-                    + " WHERE book_id = ?"
-                    + " AND user_id=?");
+        try (Connection conn = db.getConnection();
+        		PreparedStatement query = conn.prepareStatement("SELECT NULL FROM userbook"
+                        + " WHERE book_id = ? AND user_id = ? LIMIT 1")) {
+        	
             query.setInt(1, bookmarkId);
             query.setInt(2, userId);
-            ResultSet results = query.executeQuery();
             
-            boolean isOwner = false;
-            if (results.next()) { // Expecting 0-1 results
-                isOwner = results.getBoolean("owner");
+            try (ResultSet results = query.executeQuery()) {
+                if (results.next()) {
+                	return true;
+                }
+                
+                return false;
             }
-            
-            return isOwner;
-            
         } catch (SQLException e) {
             throw new Error(e);
         }
     }
-
 }

@@ -1,5 +1,8 @@
 package io.github.iidxTe.ohtu.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 public class Book extends Bookmark {
 
     private String author;
@@ -11,6 +14,14 @@ public class Book extends Bookmark {
         this.author = author;
         this.isbn = isbn;
         this.creator = creator;
+    }
+    
+    public Book(ResultSet resultSet) throws SQLException {
+    	super(resultSet);
+    	
+    	this.author = resultSet.getString("author");
+    	this.isbn = resultSet.getString("isbn");
+    	this.creator = resultSet.getString("creator");
     }
 
     public void setCreator(String creator) {
