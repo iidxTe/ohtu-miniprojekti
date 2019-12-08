@@ -52,7 +52,9 @@ jacocoTestReport {
     }
         afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['io/github/iidxTe/ohtu/security/**'])
+            fileTree(dir: it, exclude: ['io/github/iidxTe/ohtu/security/**',
+                                        '**/*ListBookmarkDao*.*',
+                                        '**/*MapUserDao*.*'])
         }))
     }
 }
