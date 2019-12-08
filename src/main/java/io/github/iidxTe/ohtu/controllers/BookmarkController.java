@@ -38,18 +38,10 @@ public class BookmarkController {
         model.addAttribute("user", user.getDisplayName());
         model.addAttribute("group", user.getGroup());
         
-        List<Bookmark> books;
-        if (user.getGroup() != null) {
-            books = userDao.getUsersByGroup(user.getGroup()).stream()
-                    .map(u -> service.listAllByUser(u)).flatMap(x -> x.stream())
-                    .collect(Collectors.toList());
-        } else {
-            books = service.listAllByUser(user);
-        }
+        List<Bookmark> books = service.listAllByUser(user);
         model.addAttribute("books", books);
 
         model.addAttribute("types", service.getAvailableBookmarks());
-        //model.addAttribute("user", login.getName());
         return "index";
     }
 
