@@ -2,8 +2,12 @@ package io.github.iidxTe.ohtu.controllers;
 
 import io.github.iidxTe.ohtu.dao.UserDao;
 import io.github.iidxTe.ohtu.domain.BookmarkService;
+import io.github.iidxTe.ohtu.model.Bookmark;
+import io.github.iidxTe.ohtu.model.User;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,10 +33,22 @@ public class BookmarkController {
         
     @GetMapping("/")
     public String home(Model model, Principal login) {
-        model.addAttribute("user", userDao.getUser(login.getName()).getDisplayName());
-        model.addAttribute("books", service.listAllByUser(userDao.getUser(login.getName())));
+        User user = userDao.getUser(login.getName());
+
+        model.addAttribute("user", user.getDisplayName());
+        
+        List<Bookmark> books;
+        if (user.getGroup() != null) {
+            books = userDao.getUsersByGroup(user.getGroup()).stream()
+                    .map(u -> service.listAllByUser(u)).flatMap(x -> x.stream())
+                    .collect(Collectors.toList());
+        } else {
+            books = service.listAllByUser(user);
+        }
+        model.addAttribute("books", books);
+
         model.addAttribute("types", service.getAvailableBookmarks());
-        model.addAttribute("user", login.getName());
+        //model.addAttribute("user", login.getName());
         return "index";
     }
 

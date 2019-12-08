@@ -57,8 +57,8 @@ public class UserController {
     @PostMapping("/settings")
     public String settings(Principal login, Model model, @RequestParam String displayname, @RequestParam String group) {
         User user = dao.getUser(login.getName());
-        user.setDisplayName(displayname);
-        user.setGroup(group);
+        if (displayname != null && !displayname.isEmpty()) user.setDisplayName(displayname);
+        if (group != null && !group.isEmpty()) user.setGroup(group);
 
         dao.updateUser(user);
         return "redirect:/";
