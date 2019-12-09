@@ -1,6 +1,6 @@
 package io.github.iidxTe.ohtu;
 
-import io.github.iidxTe.ohtu.dao.ListBookmarkDao;
+import io.github.iidxTe.ohtu.testDao.ListBookmarkDao;
 import io.github.iidxTe.ohtu.domain.BookmarkService;
 import io.github.iidxTe.ohtu.model.Book;
 import io.github.iidxTe.ohtu.model.User;

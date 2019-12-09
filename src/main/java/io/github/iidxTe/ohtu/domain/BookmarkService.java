@@ -16,7 +16,7 @@ public class BookmarkService {
 
     @Autowired
     BookmarkDao dao;
-    
+
     private List<String> availableBookmarks;
 
     public BookmarkService() {
@@ -27,21 +27,21 @@ public class BookmarkService {
     public List<String> getAvailableBookmarks() {
         return this.availableBookmarks;
     }
-    
+
     public void setDao(BookmarkDao dao) {
         this.dao = dao;
     }
-    
+
     public Book getBookById(int id, int userId) {
         return (Book) dao.getBookmarkById(id, userId);
     }
-        
+
     public Book createBook(User owner, String title, String author, String isbn) {
         Book book = new Book(title, author, isbn, owner.getDisplayName());
         dao.addBookmark(owner, book);
         return book;
     }
-    
+
     public void updateBook(int userId, int bookId, boolean isRead) {
         Bookmark book = dao.getBookmarkById(bookId, userId);
         book.setIsRead(isRead);
@@ -50,21 +50,13 @@ public class BookmarkService {
         } else {
             dao.updateHasread(userId, book);
         }
-        
     }
 
     public List<Bookmark> listAllByUser(User user) {
         return dao.getVisibleBookmarks(user);
     }
-    
-    public void deleteBookmark(int id, User user) {
-        if ((user.getGroup() == null || user.getGroup().isEmpty()) && dao.isOwner(user.getId(), id) ) {
-            //if user doesn't belong to any group, bookmark will be deleted permanently
-            dao.deleteBookmark(id, true);
-        } else {
-            //if user belongs to group, bookmark is not deleted but hidden 
-            dao.deleteBookmark(id, false);
-        }
-    }
 
+    public void deleteBookmark(int id, User user) {
+        dao.deleteBookmark(id);
+    }
 }

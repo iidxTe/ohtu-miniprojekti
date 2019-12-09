@@ -1,6 +1,7 @@
 
-package io.github.iidxTe.ohtu.dao;
+package io.github.iidxTe.ohtu.testDao;
 
+import io.github.iidxTe.ohtu.dao.BookmarkDao;
 import io.github.iidxTe.ohtu.model.Book;
 import io.github.iidxTe.ohtu.model.Bookmark;
 import io.github.iidxTe.ohtu.model.User;
@@ -52,7 +53,7 @@ public class ListBookmarkDao implements BookmarkDao {
     }
 
     @Override
-    public void deleteBookmark(int bookId, boolean permanent) {
+    public void deleteBookmark(int bookId) {
         Iterator<Bookmark> it = list.iterator();
         while (it.hasNext()) {
             if (it.next().getId() == bookId) {

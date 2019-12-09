@@ -1,5 +1,6 @@
-package io.github.iidxTe.ohtu.dao;
+package io.github.iidxTe.ohtu.testDao;
 
+import io.github.iidxTe.ohtu.dao.UserDao;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -31,7 +31,7 @@ public interface BookmarkDao {
         
     Bookmark getBookmarkById(int id, int userId);
     
-    void deleteBookmark(int bookId, boolean permanent);
+    void deleteBookmark(int bookId);
     
     /**
      * Checks if user with given id owns the bookmark with given id.
