@@ -102,7 +102,7 @@ public class SeleniumTest {
     }
 
     @Test
-    public void addingBookTest(HtmlUnitDriver driver) {
+    public void addedBookIsFoundOnList(HtmlUnitDriver driver) {
         driver.get("http://localhost:8080/login");
         driver.findElement(By.id("username")).sendKeys("test");
         driver.findElement(By.id("password")).sendKeys("test");
@@ -117,7 +117,7 @@ public class SeleniumTest {
     }
 
     @Test
-    public void editingBookTest(HtmlUnitDriver driver) {
+    public void whenBookIsSetReadItShowsAsReadOnList(HtmlUnitDriver driver) {
         driver.get("http://localhost:8080/login");
         driver.findElement(By.id("username")).sendKeys("test");
         driver.findElement(By.id("password")).sendKeys("test");
@@ -135,7 +135,7 @@ public class SeleniumTest {
     }
 
     @Test
-    public void deletingBookTest(HtmlUnitDriver driver) {
+    public void whenBookIsDeletedItDoesntShowOnList(HtmlUnitDriver driver) {
         driver.get("http://localhost:8080/register");
         driver.findElement(By.id("username")).sendKeys("testx");
         driver.findElement(By.id("password")).sendKeys("testx");
@@ -155,7 +155,7 @@ public class SeleniumTest {
     }
 
     @Test
-    public void changingDisplayNameTest(HtmlUnitDriver driver) {
+    public void whenDisplayNameIsChangedItShowsOnMainPage(HtmlUnitDriver driver) {
         driver.get("http://localhost:8080/login");
         driver.findElement(By.id("username")).sendKeys("test");
         driver.findElement(By.id("password")).sendKeys("test");
