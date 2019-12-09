@@ -80,8 +80,10 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     @Override
     public List<Bookmark> getOwnedBookmarks(User user) {
         try (Connection conn = db.getConnection()) {
-            PreparedStatement query = conn.prepareStatement("SELECT books.id, books.title, books.author, books.isbn, books.creator, userbook.hasRead"
-                    + "    FROM books, userbook WHERE books.id = userbook.book_id"
+            PreparedStatement query = conn.prepareStatement("SELECT books.id, books.title, books.author, books.isbn, users.displayName, userbook.hasRead"
+                    + "    FROM books, users, userbook"
+                    + "    WHERE books.id = userbook.book_id"
+                    + "    AND users.id = userbook.user_id"
                     + "    AND userbook.user_id = ?"
                     + "    AND userbook.owner = ?"
                     + "    ORDER BY books.title");
@@ -94,7 +96,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             
             while (results.next()) {
                 Bookmark book = new Book(results.getString("books.title"),
-                        results.getString("author"), results.getString("books.isbn"), results.getString("books.creator"));
+                        results.getString("author"), results.getString("books.isbn"), results.getString("users.displayName"));
                 book.setId(results.getInt("books.id"));
                 book.setIsRead(results.getBoolean("userbook.hasRead"));
                 bookmarks.add(book);
