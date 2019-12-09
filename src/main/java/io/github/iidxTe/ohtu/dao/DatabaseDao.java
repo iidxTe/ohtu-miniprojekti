@@ -207,7 +207,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             if (results.next()) { // Expecting 0-1 results
                 Bookmark book = new Book(results.getString("title"),
                         results.getString("author"), results.getString("isbn"), results.getString("creator"));
-                book.setId(results.getInt("books.id"));
+                book.setId(results.getInt("id"));
                 book.setIsRead(results.getBoolean("hasRead"));
                 return book;
             }
