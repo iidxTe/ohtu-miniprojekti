@@ -18,16 +18,10 @@ public class BookmarkService {
     @Autowired
     BookmarkDao dao;
 
-    private List<String> availableBookmarks;
 
     public BookmarkService() {
-        this.availableBookmarks = new ArrayList<>();
-        availableBookmarks.add("kirja");
     }
 
-    public List<String> getAvailableBookmarks() {
-        return this.availableBookmarks;
-    }
 
     public void setDao(BookmarkDao dao) {
         this.dao = dao;
