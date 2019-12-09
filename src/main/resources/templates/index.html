@@ -17,13 +17,19 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/settings" id="settingsPage">Asetukset</a>
                     </li>
-               
+                    <li class="nav-item">
+                        <form 
+                            th:action="@{/logout}" method="POST"> 
+                            <input type="submit" id="logout" value="Kirjaudu ulos"/> 
+                        </form>
+                    </li>
+
                 </ul>
             </div>  
         </nav>
 
         <div>
-            <h3>Tervetuloa,</h3> <span th:text="${user}">user</span>!
+            <h3>Tervetuloa, <span th:text="${user}">user</span>!</h3>
             <span th:if="${group != null}" th:text="'Näet valitsemasi ryhmän ' + ${group} + ' lukuvinkit alla.'">Ryhmän lukuvinkit</span>
             <span th:if="${group == null}" th:text="'Näet alla omat lukuvinkkisi.'">Omat lukuvinkit</span>
         </div>
@@ -38,11 +44,6 @@
                     <h2>Lisää uusi lukuvinkki</h2>
 
                     <form th:action="@{/}" method="POST">
-                        <span>Tyyppi: </span>
-                        <select id="type" name="type">
-                            <option th:each="type: ${types}" th:value="${type}" th:text="${type}">            
-                            </option>
-                        </select><br/>
                         <span>Otsikko:</span><br/>
                         <input type="text" id="title" name="title" required="true"/><br/>
                         <span>Kirjoittaja:</span><br/>
@@ -64,7 +65,7 @@
                             <div><span th:if="${book.getIsbn().isEmpty()}" ></span></div>
                             <div><span th:unless="${book.getIsbn().isEmpty()}" th:text=" 'ISBN: ' + ${book.getIsbn()} ">isbn</span></div>
                             <div>Luettu: <span th:text="${book.isRead()} ? 'kyllä' : 'ei'">luettu</span></div>
-                            <div>Added by: <span th:text="${book.getCreator()}">creator</span></div>
+                            <div>Lisännyt: <span th:text="${book.getCreator()}">creator</span></div>
                             <a th:href="@{/editBookmark/{id}(id=${book.getId()})}" id="editBook">Muokkaa</a>
                         </li>
                     </ul>
@@ -73,11 +74,7 @@
             </div>
         </div>
 
-<form class="jumbotron text-left" 
-      
-      th:action="@{/logout}" method="POST"> 
-                            <input type="submit" id="logout" value="Kirjaudu ulos"/> 
-                        </form>
+
 
 
     </body>

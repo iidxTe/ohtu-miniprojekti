@@ -22,49 +22,44 @@ public class BookmarkController {
 
     @Autowired
     private BookmarkService service;
-    
+
     @Autowired
     private UserDao userDao;
 
     public BookmarkController() {
         this.service = new BookmarkService();
     }
-        
-        
+
     @GetMapping("/")
     public String home(Model model, Principal login) {
         User user = userDao.getUser(login.getName());
 
         model.addAttribute("user", user.getDisplayName());
         model.addAttribute("group", user.getGroup());
-        
+
         List<Bookmark> books = service.listAllByUser(user);
         model.addAttribute("books", books);
 
-        model.addAttribute("types", service.getAvailableBookmarks());
         return "index";
     }
 
     @PostMapping("/")
-    public String create(Principal login, @RequestParam String title, @RequestParam String author, @RequestParam String isbn, @RequestParam String type) {
-        switch (type) {
-            case "kirja":
-                service.createBook(userDao.getUser(login.getName()), title, author, isbn);
-                break;
-            default:
-        }
+    public String create(Principal login, @RequestParam String title, @RequestParam String author, @RequestParam String isbn) {
+
+        service.createBook(userDao.getUser(login.getName()), title, author, isbn);
+
         return "redirect:/";
     }
-    
+
     @GetMapping("/editBookmark/{id}")
     public String editBookmarkForm(Principal login, @PathVariable("id") int id, Model model) {
         User user = userDao.getUser(login.getName());
         model.addAttribute("editableBook", service.getBookById(id, user.getId()));
         return "editBookmark";
     }
-    
-    @PostMapping("/editBookmark/{id}") 
-    public String editBookmark(Principal login, @PathVariable("id") int id, @RequestParam(value="isRead", required=false) Boolean isRead) {
+
+    @PostMapping("/editBookmark/{id}")
+    public String editBookmark(Principal login, @PathVariable("id") int id, @RequestParam(value = "isRead", required = false) Boolean isRead) {
         if (isRead == null) {
             isRead = false;
         }
@@ -72,8 +67,8 @@ public class BookmarkController {
         service.updateBook(user.getId(), id, isRead);
         return "redirect:/";
     }
-    
-    @PostMapping("/deleteBookmark/{id}") 
+
+    @PostMapping("/deleteBookmark/{id}")
     public String deleteBookmark(@PathVariable("id") int id, Principal login) {
         service.deleteBookmark(id, userDao.getUser(login.getName()));
         return "redirect:/";
