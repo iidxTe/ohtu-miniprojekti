@@ -29,12 +29,12 @@ public class ListBookmarkDao implements BookmarkDao {
     }
 
     @Override
-    public void updateBookmark(Bookmark bookmark) {        
+    public void updateBookmark(int userId, Bookmark bookmark) {        
         
     }
 
     @Override
-    public Bookmark getBookmarkById(int id) {
+    public Bookmark getBookmarkById(int id, int userId) {
         Bookmark book = null;
         
         for (Bookmark bookmark : list) {
@@ -65,6 +65,11 @@ public class ListBookmarkDao implements BookmarkDao {
     @Override
     public boolean isOwner(int userId, int bookmarkId) {
         return true; // No multiuser support
+    }
+
+    @Override
+    public void updateHasread(int userId, Bookmark bookmark) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

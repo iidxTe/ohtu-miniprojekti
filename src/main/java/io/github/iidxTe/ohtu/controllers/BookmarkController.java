@@ -57,17 +57,19 @@ public class BookmarkController {
     }
     
     @GetMapping("/editBookmark/{id}")
-    public String editBookmarkForm(@PathVariable("id") int id, Model model) {
-        model.addAttribute("editableBook", service.getBookById(id));
+    public String editBookmarkForm(Principal login, @PathVariable("id") int id, Model model) {
+        User user = userDao.getUser(login.getName());
+        model.addAttribute("editableBook", service.getBookById(id, user.getId()));
         return "editBookmark";
     }
     
     @PostMapping("/editBookmark/{id}") 
-    public String editBookmark(@PathVariable("id") int id, @RequestParam(value="isRead", required=false) Boolean isRead) {
+    public String editBookmark(Principal login, @PathVariable("id") int id, @RequestParam(value="isRead", required=false) Boolean isRead) {
         if (isRead == null) {
             isRead = false;
         }
-        service.updateBook(id, isRead);
+        User user = userDao.getUser(login.getName());
+        service.updateBook(user.getId(), id, isRead);
         return "redirect:/";
     }
     

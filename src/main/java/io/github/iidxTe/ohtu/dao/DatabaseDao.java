@@ -83,7 +83,8 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             PreparedStatement query = conn.prepareStatement("SELECT books.id, books.title, books.author, books.isbn, books.creator, userbook.hasRead"
                     + "    FROM books, userbook WHERE books.id = userbook.book_id"
                     + "    AND userbook.user_id = ?"
-                    + "    AND userbook.owner = ?");
+                    + "    AND userbook.owner = ?"
+                    + "    ORDER BY books.title");
             query.setInt(1, user.getId());
             query.setBoolean(2, true);
             
@@ -118,9 +119,20 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             // Each user comes only once, so no need to worry about duplicate bookmarks
             List<Bookmark> bookmarks = new ArrayList<>();
             for (User member : groupMembers) {
+                
                 bookmarks.addAll(getOwnedBookmarks(member));
             }
-            return bookmarks;
+            
+            for (Bookmark bookmark: bookmarks) {
+                for (User member: groupMembers) {
+                    checkuserbook(member.getId(), bookmark);
+                }
+            }
+            List<Bookmark> allBookmarks = new ArrayList<>();
+            for (Bookmark bookmark: bookmarks) {
+                allBookmarks.add(getBookmarkById(bookmark.getId(), user.getId()));
+            }
+            return allBookmarks;
         }
     }
 
@@ -155,7 +167,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     }
 
     @Override
-    public void updateBookmark(Bookmark bookmark) {
+    public void updateBookmark(int userId, Bookmark bookmark) {
         try (Connection conn = db.getConnection()) {
             Book book = (Book) bookmark;
             PreparedStatement query = conn.prepareStatement("UPDATE books SET title=?, author=?, isbn=?"
@@ -167,10 +179,12 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             query.executeUpdate();
             
             PreparedStatement query2 = conn.prepareStatement("UPDATE userbook SET hasRead=?"
-                    + " WHERE book_id=?");
+                    + " WHERE book_id=?"
+                    + " AND user_id=?");
             //Not updating owner, bookmarks can't change owner
             query2.setBoolean(1, book.isRead());
             query2.setInt(2, book.getId());
+            query2.setInt(3, userId);
             query2.executeUpdate();
             
         } catch (SQLException e) {
@@ -179,12 +193,14 @@ public class DatabaseDao implements BookmarkDao, UserDao {
     }
 
     @Override
-    public Bookmark getBookmarkById(int id) {
+    public Bookmark getBookmarkById(int id, int userId) {
         try (Connection conn = db.getConnection()) {
             PreparedStatement query = conn.prepareStatement("SELECT * FROM books, userbook"
                     + " WHERE books.id = userbook.book_id"
-                    + " AND books.id=?");
+                    + " AND books.id=?"
+                    + " AND user_id=?");
             query.setInt(1, id);
+            query.setInt(2, userId);
             ResultSet results = query.executeQuery();
             
             if (results.next()) { // Expecting 0-1 results
@@ -332,6 +348,52 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             }
             
             return isOwner;
+            
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
+    }
+
+    @Override
+    public void updateHasread(int userId, Bookmark bookmark) {
+        try (Connection conn = db.getConnection()) {
+            Book book = (Book) bookmark;
+                PreparedStatement query3 = conn.prepareStatement("UPDATE userbook SET hasRead=?"
+                    + " WHERE book_id=?"
+                    + " AND user_id=?");
+                query3.setBoolean(1, book.isRead());
+                query3.setInt(2, book.getId());
+                query3.setInt(3, userId);
+                query3.executeUpdate();            
+            
+        } catch (SQLException e) {
+            throw new Error(e);
+        }
+    }
+    
+    private void checkuserbook(int userId, Bookmark bookmark) {
+        try (Connection conn = db.getConnection()) {
+            Book book = (Book) bookmark;
+            PreparedStatement query = conn.prepareStatement("SELECT * FROM userbook"
+                    + " WHERE book_id = ?"
+                    + " AND user_id=?");
+            query.setInt(1, book.getId());
+            query.setInt(2, userId);
+            ResultSet results = query.executeQuery();
+            
+            int counter = 0;
+            if (results.next()) { // Expecting 0-1 results
+                counter++;
+            }
+
+            if (counter == 0) {
+                PreparedStatement query2 = conn.prepareStatement("INSERT INTO userbook (user_id, book_id, owner, hasRead) VALUES (?, ?, ?, ?)");
+                query2.setInt(1, userId);
+                query2.setInt(2, book.getId());
+                query2.setBoolean(3, false);
+                query2.setBoolean(4, false);
+                query2.executeUpdate();
+            }    
             
         } catch (SQLException e) {
             throw new Error(e);
