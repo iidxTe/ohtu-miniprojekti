@@ -16,7 +16,6 @@ Testit voit suorittaa komennolla "./gradlew test jacocoTestReport". Testikattavu
 
 [ProductBacklog](https://docs.google.com/spreadsheets/d/1jcgyrBhQjKcOjReRpKeF86ApAhfezBlr4MvJ3JAZQGc/edit?usp=sharing)
 
-
 ## Definition of Done
 * Story has acceptance criteria, that is also documented with Cucumber and is
 automatically tested
