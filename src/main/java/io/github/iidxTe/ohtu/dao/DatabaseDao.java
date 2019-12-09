@@ -94,10 +94,10 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             List<Bookmark> bookmarks = new ArrayList<>();
 
             while (results.next()) {
-                Bookmark book = new Book(results.getString("books.title"),
-                        results.getString("author"), results.getString("books.isbn"), results.getString("users.displayName"));
-                book.setId(results.getInt("books.id"));
-                book.setIsRead(results.getBoolean("userbook.hasRead"));
+                Bookmark book = new Book(results.getString("title"),
+                        results.getString("author"), results.getString("isbn"), results.getString("displayName"));
+                book.setId(results.getInt("id"));
+                book.setIsRead(results.getBoolean("hasRead"));
                 bookmarks.add(book);
             }
 
