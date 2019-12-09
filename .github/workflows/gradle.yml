@@ -13,7 +13,8 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build with Gradle
+    - name: Test with Gradle
       run: ./gradlew check jacocoTestReport
+    - name: Push to codecov.io 
       run: bash <(curl -s https://codecov.io/bash)
 
