@@ -6,7 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -118,20 +120,20 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             // Each user comes only once, so no need to worry about duplicate bookmarks
             List<Bookmark> bookmarks = new ArrayList<>();
             for (User member : groupMembers) {
-
                 bookmarks.addAll(getOwnedBookmarks(member));
             }
-
-            for (Bookmark bookmark : bookmarks) {
-                for (User member : groupMembers) {
-                    checkuserbook(member.getId(), bookmark);
+            
+            // Update isRead for correct user
+            for (Bookmark book : bookmarks) {
+                Bookmark updated = getBookmarkById(book.getId(), user.getId());
+                if (updated != null) {
+                    book.setIsRead(updated.isRead());
+                } else {
+                    book.setIsRead(false);
                 }
             }
-            List<Bookmark> allBookmarks = new ArrayList<>();
-            for (Bookmark bookmark : bookmarks) {
-                allBookmarks.add(getBookmarkById(bookmark.getId(), user.getId()));
-            }
-            return allBookmarks;
+
+            return bookmarks;
         }
     }
 
@@ -363,13 +365,17 @@ public class DatabaseDao implements BookmarkDao, UserDao {
         }
     }
 
-    private void checkuserbook(int userId, Bookmark bookmark) {
+    /**
+     * Ensures that bookmark user-specific data exists.
+     * @param userId
+     * @param bookmark
+     */
+    public void checkUserBook(int userId, int bookId) {
         try (Connection conn = db.getConnection()) {
-            Book book = (Book) bookmark;
             PreparedStatement query = conn.prepareStatement("SELECT * FROM userbook"
                     + " WHERE book_id = ?"
                     + " AND user_id=?");
-            query.setInt(1, book.getId());
+            query.setInt(1, bookId);
             query.setInt(2, userId);
             ResultSet results = query.executeQuery();
 
@@ -381,7 +387,7 @@ public class DatabaseDao implements BookmarkDao, UserDao {
             if (counter == 0) {
                 PreparedStatement query2 = conn.prepareStatement("INSERT INTO userbook (user_id, book_id, owner, hasRead) VALUES (?, ?, ?, ?)");
                 query2.setInt(1, userId);
-                query2.setInt(2, book.getId());
+                query2.setInt(2, bookId);
                 query2.setBoolean(3, false);
                 query2.setBoolean(4, false);
                 query2.executeUpdate();

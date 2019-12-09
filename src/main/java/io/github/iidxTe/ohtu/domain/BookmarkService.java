@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.github.iidxTe.ohtu.dao.BookmarkDao;
+import io.github.iidxTe.ohtu.dao.DatabaseDao;
 import io.github.iidxTe.ohtu.model.Book;
 import io.github.iidxTe.ohtu.model.Bookmark;
 import io.github.iidxTe.ohtu.model.User;
@@ -27,6 +28,9 @@ public class BookmarkService {
     }
 
     public Book getBookById(int id, int userId) {
+        if (dao instanceof DatabaseDao) {
+            ((DatabaseDao) dao).checkUserBook(userId, id);
+        }
         return (Book) dao.getBookmarkById(id, userId);
     }
 
