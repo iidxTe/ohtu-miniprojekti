@@ -32,8 +32,8 @@ public class BookmarkService {
         this.dao = dao;
     }
     
-    public Book getBookById(int id) {
-        return (Book) dao.getBookmarkById(id);
+    public Book getBookById(int id, int userId) {
+        return (Book) dao.getBookmarkById(id, userId);
     }
         
     public Book createBook(User owner, String title, String author, String isbn) {
@@ -42,10 +42,15 @@ public class BookmarkService {
         return book;
     }
     
-    public void updateBook(int id, boolean isRead) {
-        Bookmark book = dao.getBookmarkById(id);
+    public void updateBook(int userId, int bookId, boolean isRead) {
+        Bookmark book = dao.getBookmarkById(bookId, userId);
         book.setIsRead(isRead);
-        dao.updateBookmark(book);
+        if (dao.isOwner(userId, bookId)) {
+            dao.updateBookmark(userId, book);
+        } else {
+            dao.updateHasread(userId, book);
+        }
+        
     }
 
     public List<Bookmark> listAllByUser(User user) {

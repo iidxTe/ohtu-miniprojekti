@@ -38,18 +38,10 @@ public class BookmarkController {
         model.addAttribute("user", user.getDisplayName());
         model.addAttribute("group", user.getGroup());
         
-        List<Bookmark> books;
-        if (user.getGroup() != null) {
-            books = userDao.getUsersByGroup(user.getGroup()).stream()
-                    .map(u -> service.listAllByUser(u)).flatMap(x -> x.stream())
-                    .collect(Collectors.toList());
-        } else {
-            books = service.listAllByUser(user);
-        }
+        List<Bookmark> books = service.listAllByUser(user);
         model.addAttribute("books", books);
 
         model.addAttribute("types", service.getAvailableBookmarks());
-        //model.addAttribute("user", login.getName());
         return "index";
     }
 
@@ -65,17 +57,19 @@ public class BookmarkController {
     }
     
     @GetMapping("/editBookmark/{id}")
-    public String editBookmarkForm(@PathVariable("id") int id, Model model) {
-        model.addAttribute("editableBook", service.getBookById(id));
+    public String editBookmarkForm(Principal login, @PathVariable("id") int id, Model model) {
+        User user = userDao.getUser(login.getName());
+        model.addAttribute("editableBook", service.getBookById(id, user.getId()));
         return "editBookmark";
     }
     
     @PostMapping("/editBookmark/{id}") 
-    public String editBookmark(@PathVariable("id") int id, @RequestParam(value="isRead", required=false) Boolean isRead) {
+    public String editBookmark(Principal login, @PathVariable("id") int id, @RequestParam(value="isRead", required=false) Boolean isRead) {
         if (isRead == null) {
             isRead = false;
         }
-        service.updateBook(id, isRead);
+        User user = userDao.getUser(login.getName());
+        service.updateBook(user.getId(), id, isRead);
         return "redirect:/";
     }
     

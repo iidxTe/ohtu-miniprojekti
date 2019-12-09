@@ -27,9 +27,9 @@ public interface BookmarkDao {
 
     void addBookmark(User user, Bookmark bookmark);
     
-    void updateBookmark(Bookmark bookmark);
+    void updateBookmark(int userId, Bookmark bookmark);
         
-    Bookmark getBookmarkById(int id);
+    Bookmark getBookmarkById(int id, int userId);
     
     void deleteBookmark(int bookId, boolean permanent);
     
@@ -40,5 +40,7 @@ public interface BookmarkDao {
      * @return Whether the user owns the bookmark or not.
      */
     boolean isOwner(int userId, int bookmarkId);
+    
+    void updateHasread(int userId, Bookmark bookmark);
 
 }
