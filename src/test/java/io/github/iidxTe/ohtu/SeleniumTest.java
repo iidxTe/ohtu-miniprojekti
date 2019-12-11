@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import io.github.bonigarcia.seljup.SeleniumExtension;
@@ -23,6 +22,33 @@ public class SeleniumTest {
         driver.findElement(By.id("password")).sendKeys("test");
         driver.findElement(By.id("register")).click();
         assertTrue(driver.getPageSource().contains("Kirjaudu sisään"));
+    }
+    
+    @Test
+    public void cantOverwriteUser(HtmlUnitDriver driver) {
+        driver.get("http://localhost:8080/register");
+        driver.findElement(By.id("username")).sendKeys("test");
+        driver.findElement(By.id("password")).sendKeys("test");
+        driver.findElement(By.id("register")).click();
+        assertTrue(driver.getPageSource().contains("Käyttäjätunnus on jo olemassa."));
+    }
+    
+    @Test
+    public void cantRegisterShortUsername(HtmlUnitDriver driver) {
+        driver.get("http://localhost:8080/register");
+        driver.findElement(By.id("username")).sendKeys("t");
+        driver.findElement(By.id("password")).sendKeys("test");
+        driver.findElement(By.id("register")).click();
+        assertTrue(driver.getPageSource().contains("Käyttäjänimen ja salasanan tulee olla vähintään 4 merkkiä pitkiä"));
+    }
+    
+    @Test
+    public void cantRegisterShortPassword(HtmlUnitDriver driver) {
+        driver.get("http://localhost:8080/register");
+        driver.findElement(By.id("username")).sendKeys("test2");
+        driver.findElement(By.id("password")).sendKeys("t");
+        driver.findElement(By.id("register")).click();
+        assertTrue(driver.getPageSource().contains("Käyttäjänimen ja salasanan tulee olla vähintään 4 merkkiä pitkiä"));
     }
 
     @Test
