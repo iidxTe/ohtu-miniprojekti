@@ -1,23 +1,36 @@
-﻿# ohtu-miniprojekti ![](https://github.com/iidxTe/ohtu-miniprojekti/workflows/Java%20CI/badge.svg)
+﻿# ohtu-miniprojekti
+ ![](https://github.com/iidxTe/ohtu-miniprojekti/workflows/Java%20CI/badge.svg)
 
 [![codecov](https://codecov.io/gh/iidxTe/ohtu-miniprojekti/branch/master/graph/badge.svg)](https://codecov.io/gh/iidxTe/ohtu-miniprojekti)
 
-Projektin tarkoituksena on harjoitella ketterien ohjelmistotuotantoprosessien ja scrum-menetelmien käyttöä. 
+[Product Backlog and Sprint Backlogs ](https://docs.google.com/spreadsheets/d/1jcgyrBhQjKcOjReRpKeF86ApAhfezBlr4MvJ3JAZQGc/edit?usp=sharing)
 
-Projektissa toteutetaan lukuvinkkikirjasto. Lukuvinkkikirjaston tarkoituksena on toimia käyttäjän henkilökohtaisena lukuvinkkien tallennuspaikkana. Tallennettujen lukuvinkkien selailun lisäksi käyttäjä voi merkata lukemansa kirjan luetuksi. Lukuvinkkikirjasto vaatii rekisteröitymisen palvelun käyttäjäksi. 
+The idea of this project is to practice using agile software development and scrum processes.
 
-Sovellusta voi käyttää suoraan selaimella ositteessa: https://limitless-lowlands-09269.herokuapp.com/.
+In this project a reading tip library will be implemented. The idea of the library is to be a place where user can save their reading tips. User is able to browse the tips and mark books read. The user needs to register to the library.
 
-Vaihtoehtoisesti voit ladata ohjeman koneellesi kloonaamalla projektin osoitteesta https://github.com/iidxTe/ohtu-miniprojekti.git. Kloonattuasi projektin voit suorittaa komennon "./gradlew bootrun" projetin juurikansiossa ja tämän jälkeen käyttää sovellusta osoitteessa localhost:8080.
+### User Guide
+Application can be used directly via browser from url:
+https://limitless-lowlands-09269.herokuapp.com/
 
-Toimiakseen ohjelma vaatii että koneellesi on asennettuna Java8.
+You can also download the software to your workstation by cloning from the project: 
+https://github.com/iidxTe/ohtu-miniprojekti.git
 
-Testit voit suorittaa komennolla "./gradlew test jacocoTestReport". Testikattavuusraportin löytää tiedostosta build/reports/jacoco/test/html/index.html.
+After cloning the project, run command:
+"./gradlew bootrun" 
+in the project root file and after this use the software in address localhost:8080.
 
-[ProductBacklog](https://docs.google.com/spreadsheets/d/1jcgyrBhQjKcOjReRpKeF86ApAhfezBlr4MvJ3JAZQGc/edit?usp=sharing)
+You need to have Java 8 installed to use this software.
+
+### Tests:
+Tests can be executed by running:
+"./gradlew test jacocoTestReport". 
+
+Report about the range of tests can be found from file:
+build/reports/jacoco/test/html/index.html
 
 
-## Definition of Done
+### Definition of Done
 * Story has acceptance criteria, that is also documented with Cucumber and is
 automatically tested
 * Line coverage of added code is at least 70%
