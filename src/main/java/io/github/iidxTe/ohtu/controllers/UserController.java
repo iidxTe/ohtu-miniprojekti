@@ -22,6 +22,16 @@ public class UserController {
     @Autowired
     private UserDao dao;
 
+    // For testing
+    public void setDao(UserDao dao) {
+        this.dao = dao;
+    }
+
+    // For testing
+    public UserDao getDao() {
+        return dao;
+    }
+
     @GetMapping("/register")
     public String registerForm(Model model) {
         return "register";

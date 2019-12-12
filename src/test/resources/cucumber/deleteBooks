@@ -1,0 +1,6 @@
+Feature: As a user I can delete books
+
+    Scenario: Delete a book
+        Given the list is not empty
+        When a book is deleted
+        Then the list should be empty

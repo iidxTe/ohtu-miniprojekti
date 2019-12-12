@@ -4,23 +4,33 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
+import io.cucumber.java.Before;
 import io.github.iidxTe.ohtu.testDao.ListBookmarkDao;
+import io.github.iidxTe.ohtu.testDao.MapUserDao;
 import io.github.iidxTe.ohtu.domain.BookmarkService;
 import io.github.iidxTe.ohtu.model.Book;
 import io.github.iidxTe.ohtu.model.Bookmark;
 import io.github.iidxTe.ohtu.model.User;
+import io.github.iidxTe.ohtu.controllers.UserController;
+import io.github.iidxTe.ohtu.dao.UserDao;
 
 import static org.junit.Assert.*;
+
+import java.security.Principal;
+import java.util.List;
+
+import org.springframework.ui.ConcurrentModel;
 
 public class Stepdefs {
 
     BookmarkService service;
     Book book;
     User user;
+    UserController usercont;
 
-    public Stepdefs() {
+    @Before public void setup() {
+        usercont = new UserController();
         service = new BookmarkService();
-        service.setDao(new ListBookmarkDao());
         user = new User("test");
         user.setId(0);
     }
@@ -73,6 +83,83 @@ public class Stepdefs {
             }
         }
         assertTrue(found1 && found2);
+    }
+
+    @Given("user is not registered")
+    public void userIsNotRegistered() {
+        usercont.setDao(new MapUserDao());
+    } 
+
+    @When("username {string} with password {string} registers")
+    public void userRegisters(String username, String password) {
+        usercont.register(new ConcurrentModel(), username, password);
+    }
+
+    @Then ("user {string} is registered")
+    public void isUserRegistered(String username) {
+        assertTrue(usercont.getDao().getUser(username) != null);
+    }
+
+    @Then ("user {string} is not registered")
+    public void isUserNotRegistered(String username) {
+        assertTrue(usercont.getDao().getUser(username) == null);
+    }
+
+    @Given ("that user {string} is registered")
+    public void userIsRegistered(String username) {
+        UserDao userdao = new MapUserDao();
+        userdao.createUser(username, "password");
+        usercont.setDao(userdao);
+    }
+
+    @When ("display name of {string} is changed to {string}")
+    public void displayNameIsChanged(String username, String displayName) {
+        usercont.settings(createPrincipal(username), new ConcurrentModel(), displayName, "");
+    }
+
+    @Then ("display name of {string} is {string}")
+    public void displayNameIs(String username, String displayName) {
+        assertEquals(displayName, usercont.getDao().getUser(username).getDisplayName());
+    }
+
+    @Given ("user has an unread book")
+    public void userHasAnUnreadBook() {
+        service.setDao(new ListBookmarkDao());
+        service.createBook(user, "Samuli Turska", "Näin kalastat kalaa", "314666");
+    }
+
+    @When ("a book is marked read")
+    public void aBookIsMarkedRead() {
+        List<Bookmark> bookmarks = service.listAllByUser(user);
+        Bookmark book = bookmarks.get(0);
+        service.updateBook(user.getId(), book.getId(), true);
+    }
+
+    @Then ("the book should be marked read")
+    public void theBookShouldBeMarkedRead() {
+        assertTrue(service.listAllByUser(user).get(0).isRead());
+    }
+
+    @When ("a book is deleted")
+    public void aBookIsDeleted() {
+        service.deleteBookmark(service.listAllByUser(user).get(0).getId(), user);
+    }
+
+    @Then ("the list should be empty")
+    public void theListShouldBeEmpty() {
+        assertTrue(service.listAllByUser(user).isEmpty());
+    }
+
+    
+
+
+    private Principal createPrincipal(String name) {
+        return new Principal(){
+            @Override
+            public String getName() {
+                return name;
+            }
+        };
     }
 
 }
