@@ -31,7 +31,7 @@ build/reports/jacoco/test/html/index.html
 
 
 ### Definition of Done
-* Story has acceptance criteria, that is also documented with Cucumber and is
+* User stories have acceptance criteria, and most of them are also documented with Cucumber and are
 automatically tested
 * Line coverage of added code is at least 70%
 * CI passes all tests
