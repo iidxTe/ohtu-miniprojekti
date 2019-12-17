@@ -5,6 +5,8 @@
 
 [Product Backlog and Sprint Backlogs ](https://docs.google.com/spreadsheets/d/1jcgyrBhQjKcOjReRpKeF86ApAhfezBlr4MvJ3JAZQGc/edit?usp=sharing)
 
+[Loppuraportti](https://docs.google.com/document/d/15SEpT4mPRN-EIctgTTDJEcddj2HMARiyeQj8k3PQxRQ/edit?usp=sharing)
+
 The idea of this project is to practice using agile software development and scrum processes.
 
 In this project a reading tip library will be implemented. The idea of the library is to be a place where user can save their reading tips. User is able to browse the tips and mark books read. The user needs to register to the library.
